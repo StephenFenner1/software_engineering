@@ -19,7 +19,7 @@ public class Client {
     private int ID;
     boolean cashingOut;
     
-    public Client() {
+    public Client(String fileName) {
     
     }
 

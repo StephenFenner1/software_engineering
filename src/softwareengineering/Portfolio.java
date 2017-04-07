@@ -5,6 +5,9 @@
  */
 package softwareengineering;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,9 +16,28 @@ import java.util.Map;
  */
 public class Portfolio {
     
-    private Map stockOwned;
+    private Map stockOwned; //Map(companyName, stockValue)
+    private Client client; //the client    
     
-    public Portfolio() {
+    public Portfolio(Client client, String[] companyName, Integer[] stocks) {
+        this.client = client;
+        List<String> companyNames = new ArrayList<String>(Arrays.asList(companyName)); //turn companyName into list
+        List<Integer> stockPrice = new ArrayList<Integer>(Arrays.asList(stocks)); ////turn stocks into list
         
+        //both lists have to be the same size
+        if(companyNames.size() == stockPrice.size()) {
+            //concat lists into map with key = companyName, value = stockValue;
+            for(int i = 0; i < companyNames.size(); i++) {
+                stockOwned.put(companyNames.get(i), stockPrice.get(i));
+            }
+        }
+    }    
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Map getStockOwned() {
+        return stockOwned;
     }
 }

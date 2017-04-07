@@ -5,17 +5,17 @@
  */
 package softwareengineering;
 
+import java.util.Map;
+
 /**
  *
  * @author stf23
  */
-public class SoftwareEngineering {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+public class Portfolio {
     
+    private Map stockOwned;
+    
+    public Portfolio() {
+        
+    }
 }

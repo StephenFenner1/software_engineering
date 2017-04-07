@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package softwareengineering;
 
 /**
  *
- * @author stf23
  */
 public class Client {
     
@@ -16,11 +10,19 @@ public class Client {
     private int initialValue;
     private int currentValue;
     private int expectedValue;
-    private int ID;
-    boolean cashingOut;
+    private boolean cashingOut;
     
-    public Client(String fileName) {
-    
+    public Client(String clientName, int cashHolding, int initialValue) {
+        // Initialise clientName, cashHolding and initialValue to given values.
+        this.clientName = clientName;
+        this.cashHolding = cashHolding;
+        this.initialValue = initialValue;
+        // Initialise currentValue to match initialValue.
+        this.currentValue = initialValue;
+        // Set expectedValue to a 10% return.
+        this.expectedValue = (int)(initialValue * 1.1);
+        // Initialise cashingOut as false.
+        this.cashingOut = false;
     }
 
     public String getClientName() {
@@ -63,14 +65,6 @@ public class Client {
         this.expectedValue = expectedValue;
     }
 
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
     public boolean isCashingOut() {
         return cashingOut;
     }
@@ -78,6 +72,4 @@ public class Client {
     public void setCashingOut(boolean cashingOut) {
         this.cashingOut = cashingOut;
     }
-    
-    
 }

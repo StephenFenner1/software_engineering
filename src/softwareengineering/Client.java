@@ -79,5 +79,9 @@ public class Client {
         this.cashingOut = cashingOut;
     }
     
+    void w() {
+        print("");
+    }
+    
     
 }

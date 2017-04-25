@@ -17,7 +17,7 @@ public class Portfolio {
     * Constructor method for the Portfolio class. Creates a new portfolio for the 
     * specified Client. Initialises and fills a HashMap with the contents
     * of two arrays (read from the initialisation data), also intialises the client
-    * that the portfolio belongs too.
+    * that the portfolio belongs to.
     *
     * @param client         The client who owns the portfolio
     * @param companyName    Array that contains the company names respective to the client from the initialisation data

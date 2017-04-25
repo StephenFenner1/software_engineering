@@ -17,18 +17,18 @@ public class Portfolio {
     * Constructor method for the Portfolio class. Creates a new portfolio for the 
     * specified Client. Initialises and fills a HashMap with the contents
     * of two arrays (read from the initialisation data), also intialises the client
-    * that the portfolio belongs to.
+    * that the portfolio belongs too.
     *
-    * @param client         The client who owns the portfolio
-    * @param companyName    Array that contains the company names respective to the client from the initialisation data
-    * @param stocks         Array that contains the stock prices respective to the client from the initialisation data
+    * @param client         The client who owns the portfolio.
+    * @param companyName    Array that contains the company names respective to the client from the initialisation data.
+    * @param stocks         Array that contains the stock prices respective to the client from the initialisation data.
     */
     public Portfolio(Client client, String[] companyName, int[] stocks) {
         this.client = client;        
         stockOwned = new HashMap<String, Integer>();
         //both arrays have to be the same size
         if(companyName.length == stocks.length) {
-            //concat arrays into map with key = companyName, value = stockValue;
+            //concat lists into map with key = companyName, value = stockValue;
             for(int i= 0; i < companyName.length; i++){
                 stockOwned.put(companyName[i], stocks[i]);
             }
@@ -51,7 +51,17 @@ public class Portfolio {
     */
     public Map getStockOwned() {
         return stockOwned;
-    } 
+    }
+    
+    /*
+    * Gets the price of the stock of a company given in the clients portfolio
+    *
+    * @param  name   The company name.
+    * @return        The price of the companies stock.      
+    */
+    public int getPrice(String name) {
+        return (int) stockOwned.get(name);
+    }
     
     /*
     * Method to print the contents of the portfolio in the format: ("Company name" : "Stock price")
@@ -62,5 +72,5 @@ public class Portfolio {
             String value = stockOwned.get(company).toString();
             System.out.println(key + " : " + value);
         }
-    } 
+    }
 }

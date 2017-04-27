@@ -10,25 +10,38 @@ package softwareengineering;
  * @author Josh Hasan
  */
 public class RandomTrader extends Trader{
-    //An enum initialisation used to define the traders mood.
+    
+    /*
+     *  An enum initialisation used to define the traders mood.
+     */
     public enum Mood{
         Balanced, AggressiveSeller, AggressivePurchaser;
     };
     
-    //The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
+    /*
+     *  The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
+     */
     private Mood mood;
     
-    //
+    /**
+     *  Constructor method for the Random Trader. Initialises all traders to have a balanced mood.
+     */
     public RandomTrader() {
         this.mood = Mood.Balanced;
     }
     
-    //Returns the mood of the trader.
+    /**
+     *  Getter method for the mood of the trader.
+     *  @return The mood of the trader.
+     */
     public Mood GetMood() {
         return mood;
     }
     
-    //Sets a new mood for the trader.
+    /*
+     *  Setter method for the mood for the trader.
+     *  @param mood  The new mood for the trader.
+     */
     public void setMood(Mood mood) {
         this.mood = mood;
     }

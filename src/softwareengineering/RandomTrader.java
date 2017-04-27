@@ -9,12 +9,12 @@ package softwareengineering;
  *
  * @author Josh Hasan
  */
-public class RandomTrader extends Trader{
+public class RandomTrader extends Trader {
     
     /*
      *  An enum initialisation used to define the traders mood.
      */
-    public enum Mood{
+    public enum Mood {
         Balanced, AggressiveSeller, AggressivePurchaser;
     };
     

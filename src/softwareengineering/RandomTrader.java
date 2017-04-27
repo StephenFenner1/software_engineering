@@ -47,7 +47,7 @@ public class RandomTrader extends Trader {
      *  Setter method for the mood for the trader.
      *  @param mood  The new mood for the trader.
      */
-    public void setMood(Mood mood) {
-        this.mood = mood;
+    public void changeMood() {
+        
     }
 }

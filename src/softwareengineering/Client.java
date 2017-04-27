@@ -3,6 +3,8 @@ package softwareengineering;
 /**
  * Storage class for client data. Stores the name, value and cash holding of a
  * client and whether or not the client is cashing out.
+ * 
+ * @author Jamie Critcher
  */
 public class Client {
 

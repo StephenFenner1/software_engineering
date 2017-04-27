@@ -200,6 +200,9 @@ public class Simulation {
                                 
         }
         
+        /*
+        * Create the Trading Exchange
+        */
         
     }
 }

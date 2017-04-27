@@ -13,11 +13,7 @@ import java.util.List;
  */
 public abstract class Trader {
     
-    private List<Portfolio> portfolios;
-    
-    public Trader() {
-        
-    }
+    public List<Portfolio> portfolios;
     
     public int requestTrade() {
         return -1;

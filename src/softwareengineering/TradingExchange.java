@@ -5,6 +5,8 @@ import java.util.Map;
 
 /**
  * Class to handle trading mechanism for stock market simulation.
+ * 
+ * @author Jamie Critcher
  */
 public class TradingExchange {
 
@@ -32,13 +34,16 @@ public class TradingExchange {
     public void handleTrades() {
         // Loop through all companies.
         for (Company company : companies) {
-
-            getTrades(company);
-            
-            makeTrades(company);
-
-            buyQueue.clear();
-            sellQueue.clear();
+            // Check that the company is not bankrupt.
+            if (!company.isBankrupt()) {
+                // Get and store trades in buyQueue and sellQueue.
+                getTrades(company);
+                // Make all available trades in buyQueue and sellQueue.
+                makeTrades(company);
+                // Clear the queues for the next company to use.
+                buyQueue.clear();
+                sellQueue.clear();
+            }
         }
 
     }
@@ -54,7 +59,7 @@ public class TradingExchange {
         // Loop through all traders.
         for (Portfolio portfolio : portfolios) {
             // Get trade request from current trader for current company.
-            int trade = portfolio.getTrader().requestTrade(company);
+            int trade = portfolio.getTrader().requestTrade(company, portfolio);
             // Assign trade to correct queue, ignore if trade is 0.
             if (trade < 0) {
                 sellQueue.put(portfolio, -trade);
@@ -78,63 +83,52 @@ public class TradingExchange {
         for (Integer trade : buyQueue.values()) {
             buyTotal += trade;
         }
-
         for (Integer trade : sellQueue.values()) {
             sellTotal += trade;
         }
         
+        // Update the supply/demand rate of the company with the raw difference.
         int dif = (buyTotal - sellTotal);
-        
         company.updateSupplyDemandRate(dif);
 
         if (buyTotal == sellTotal) {
             // Make all trades.
-
             for (Portfolio portfolio : buyQueue.keySet()) {
-                portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company);
+                portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
             }
-
             for (Portfolio portfolio : sellQueue.keySet()) {
-                portfolio.getTrader().makeTrade(sellQueue.get(portfolio), company);
+                portfolio.getTrader().makeTrade(-sellQueue.get(portfolio), company, portfolio);
             }
-
         } else if (buyTotal > sellTotal) {
-
             // All sales can be made.
             for (Portfolio portfolio : sellQueue.keySet()) {
-                portfolio.getTrader().makeTrade(sellQueue.get(portfolio), company);
+                portfolio.getTrader().makeTrade(-sellQueue.get(portfolio), company, portfolio);
             }
-
             // Make as many purchases as possible.
             for (Portfolio portfolio : buyQueue.keySet()) {
                 if (buyTotal != 0) {
                     if (buyTotal >= buyQueue.get(portfolio)) {
-                        portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company);
+                        portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
                         buyTotal -= buyQueue.get(portfolio);
                     } else {
-                        portfolio.getTrader().makeTrade(buyTotal, company);
+                        portfolio.getTrader().makeTrade(buyTotal, company, portfolio);
                         buyTotal = 0;
                     }
-                }/* else {
-                        trader.makeTrade(0);
-                    }*/
+                }
             }
-
         } else {
             // All purchases can be made.
-
             for (Portfolio portfolio : buyQueue.keySet()) {
-                portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company);
+                portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
             }
-
             // Make as many sales as possible.
             for (Portfolio portfolio : sellQueue.keySet()) {
                 if (sellTotal != 0) {
                     if (sellTotal >= sellQueue.get(portfolio)) {
-                        portfolio.getTrader().makeTrade(sellQueue.get(portfolio), company);
+                        portfolio.getTrader().makeTrade(-sellQueue.get(portfolio), company, portfolio);
                         sellTotal -= sellQueue.get(portfolio);
                     } else {
-                        portfolio.getTrader().makeTrade(sellTotal, company);
+                        portfolio.getTrader().makeTrade(-sellTotal, company, portfolio);
                         sellTotal = 0;
                     }
                 }

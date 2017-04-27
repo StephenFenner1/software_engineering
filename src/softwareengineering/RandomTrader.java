@@ -30,6 +30,11 @@ public class RandomTrader extends Trader {
         this.portfolios = portfolios;
     }
     
+    @Override
+    public int requestTrade(Company company, Portfolio portfolio) {
+        
+    }
+    
     /**
      *  Getter method for the mood of the trader.
      *  @return The mood of the trader.

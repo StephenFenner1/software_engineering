@@ -3,6 +3,8 @@ package softwareengineering;
 /**
  * Storage class for company data. Stores the name, stock info and supply/demand
  * rate of a company and whether or not the company is bankrupt.
+ * 
+ * @author Jamie Critcher
  */
 public class Company {
 
@@ -10,7 +12,7 @@ public class Company {
     private final stockType stockType;
     private final int STOCK_TOTAL;
     private int supplyDemandRate;
-    private int  stockValue;
+    private int stockValue;
     private boolean bankrupt;
     // Create new public enum stockType.
     public enum stockType {
@@ -41,13 +43,13 @@ public class Company {
         supplyDemandRate = 0;
     }
     
-     /**
-     * Update method to update the current supply/demand rate of the company.
-     * 
-     * @param supplyDemandRate  Value to update the supply/demand rate of the company.
+    /**
+     * Method to update the stock value of a company by the raw supply/demand
+     * rate, supply/demand rate reset to 0 afterwards.
      */
-    public void updateSupplyDemandRate(int supplyDemandRate) {
-        this.supplyDemandRate += supplyDemandRate;
+    public void updateStockValue() {
+        stockValue += supplyDemandRate;
+        setSupplyDemandRate(0);
     }
 
     /**
@@ -57,6 +59,15 @@ public class Company {
      */
     public void setSupplyDemandRate(int supplyDemandRate) {
         this.supplyDemandRate = supplyDemandRate;
+    }
+
+    /**
+     * Update method to update the current supply/demand rate of the company.
+     * 
+     * @param supplyDemandRate  Change in supply/demand rate of the company.
+     */
+    public void updateSupplyDemandRate(int supplyDemandRate) {
+        this.supplyDemandRate += supplyDemandRate;
     }
 
     /**

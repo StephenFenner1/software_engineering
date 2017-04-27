@@ -200,9 +200,6 @@ public class Simulation {
                                 
         }
         
-        /*
-        * Create Trading Exchange
-        */
-        TradingExchange tradingExchange = new TradingExchange(portList, companies);
+        
     }
 }

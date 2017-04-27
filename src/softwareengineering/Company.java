@@ -40,6 +40,15 @@ public class Company {
         // Initialise supplyDemandRate as 0.
         supplyDemandRate = 0;
     }
+    
+     /**
+     * Update method to update the current supply/demand rate of the company.
+     * 
+     * @param supplyDemandRate  Value to update the supply/demand rate of the company.
+     */
+    public void updateSupplyDemandRate(int supplyDemandRate) {
+        this.supplyDemandRate += supplyDemandRate;
+    }
 
     /**
      * Setter method to set the current supply/demand rate of the company.

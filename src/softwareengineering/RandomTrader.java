@@ -1,23 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package softwareengineering;
 
 /**
- *
- * @author Josh Hasan
+ * Class to handle a random trader and it's AI functionality.
+ * 
+ * @author Josh Hasan, Jamie Critcher
  */
 
 import java.util.List;
+import java.util.Random;
 
 public class RandomTrader extends Trader {
     
-    /*
-     *  The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
-     */
-    private Mood mood;
+    private Mood mood;  // The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
     
     /**
      *  Constructor method for the Random Trader.
@@ -29,10 +23,45 @@ public class RandomTrader extends Trader {
         this.mood = Mood.Balanced;
         this.portfolios = portfolios;
     }
-    
+
+    /**
+     * Public method to request a trade decision on a specific company and
+     * portfolio.
+     * 
+     * @param company   The company that traders are trading stocks in.
+     * @param portfolio The portfolio the traders is controlling.
+     * @return          The number of stocks to trade in the company.
+     */
     @Override
     public int requestTrade(Company company, Portfolio portfolio) {
+        Random rand = new Random();
+        float var = (3 * rand.nextFloat());
         
+        if (var < 1) {
+            // Buy stocks.
+            var = rand.nextFloat();
+            switch (mood) {
+                case AggressiveSeller:
+                    return Math.round((var * (int)portfolio.getStockOwned().get(company)) / 200);
+                case Balanced:
+                    return Math.round((var * (int)portfolio.getStockOwned().get(company)) / 100);
+                case AggressivePurchaser:
+                    return Math.round((var * (int)portfolio.getStockOwned().get(company)) / 50);
+            }
+        } else if (var < 2) {
+            // Sell stocks.
+            var = rand.nextFloat();
+            switch (mood) {
+                case AggressiveSeller:
+                    return -(Math.round((var * (int)portfolio.getStockOwned().get(company)) / 50));
+                case Balanced:
+                    return -(Math.round((var * (int)portfolio.getStockOwned().get(company)) / 100));
+                case AggressivePurchaser:
+                    return -(Math.round((var * (int)portfolio.getStockOwned().get(company)) / 200));
+            }
+        }
+        // Do not trade.
+        return 0;
     }
     
     /**
@@ -43,9 +72,8 @@ public class RandomTrader extends Trader {
         return mood;
     }
     
-    /*
-     *  Used to randomly change the modd of the trader.
-     *  Probabilities of the new mood depends on the current mood of the trader.
+    /**
+     *  public method to change the mood of the trader.
      */
     public void changeMood() {
         Random rand = new Random();
@@ -65,7 +93,7 @@ public class RandomTrader extends Trader {
                     mood = Mood.AggressivePurchaser;
                 }
                 break;
-                
+            
             case AggressivePurchaser:
                 if (val < 0.7) {
                     mood = Mood.Balanced;

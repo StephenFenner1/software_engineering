@@ -9,8 +9,21 @@ import java.util.List;
 
 /**
  *
- * @author stf23
+ * @author Josh Hasan
  */
-public class Trader {
-    List portfolios;
+public abstract class Trader {
+    
+    private List<Portfolio> portfolios;
+    
+    public Trader() {
+        
+    }
+    
+    public int requestTrade() {
+        return -1;
+    }
+    
+    public void makeTrade(int stocks) {
+        
+    }
 }

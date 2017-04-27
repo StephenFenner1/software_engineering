@@ -20,7 +20,10 @@ public class RandomTrader extends Trader {
     private Mood mood;
     
     /**
-     *  Constructor method for the Random Trader. Initialises all traders to have a balanced mood.
+     *  Constructor method for the Random Trader.
+     *  Initialises all traders to have a balanced mood.
+     *  Stores all the portfolios relevant to this trader.
+     *  @param portfolios
      */
     public RandomTrader(List<Portfolio> portfolios) {
         this.mood = Mood.Balanced;

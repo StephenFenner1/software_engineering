@@ -15,7 +15,7 @@ public abstract class Trader {
     
     public List<Portfolio> portfolios;
     
-    public abstract int requestTrade(Company company);
+    public abstract int requestTrade(Company company, Portfolio portfolio);
     
     public void makeTrade(Integer stocks, Company company) {
         

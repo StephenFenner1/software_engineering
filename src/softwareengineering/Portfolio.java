@@ -12,7 +12,7 @@ public class Portfolio {
     
     private Map stockOwned; //Map(companyName, stockValue)
     private Client client; //the client    
-    
+    private Trader trader; //the trader
     /*
     * Constructor method for the Portfolio class. Creates a new portfolio for the 
     * specified Client. Initialises and fills a HashMap with the contents
@@ -23,8 +23,9 @@ public class Portfolio {
     * @param companyName    Array that contains the company names respective to the client from the initialisation data.
     * @param stocks         Array that contains the stock prices respective to the client from the initialisation data.
     */
-    public Portfolio(Client client, String[] companyName, int[] stocks) {
-        this.client = client;        
+    public Portfolio(Client client, String[] companyName, int[] stocks, Trader trader) {
+        this.client = client;     
+        this.trader = trader;
         stockOwned = new HashMap<String, Integer>();
         //both arrays have to be the same size
         if(companyName.length == stocks.length) {
@@ -33,7 +34,15 @@ public class Portfolio {
                 stockOwned.put(companyName[i], stocks[i]);
             }
         }
-    }    
+    } 
+    /*
+    * Getter method for the trader that the portfolio belongs to
+    *
+    * @return The trader object.
+    */
+    public Client getTrader() {
+        return trader;
+    }
 
     /*
     * Getter method for the client that the portfolio belongs to

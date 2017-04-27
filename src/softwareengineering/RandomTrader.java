@@ -44,10 +44,33 @@ public class RandomTrader extends Trader {
     }
     
     /*
-     *  Setter method for the mood for the trader.
-     *  @param mood  The new mood for the trader.
+     *  Used to randomly change the modd of the trader.
+     *  Probabilities of the new mood depends on the current mood of the trader.
      */
     public void changeMood() {
+        Random rand = new Random();
+        float val = rand.nextFloat();
         
+        switch(mood) {
+            case AggressiveSeller:
+                if (val > 0.4) {
+                    mood = Mood.Balanced;
+                }
+                break;
+                
+            case Balanced:
+                if (val < 0.1) {
+                    mood = Mood.AggressiveSeller;
+                } else if (val > 0.9) {
+                    mood = Mood.AggressivePurchaser;
+                }
+                break;
+                
+            case AggressivePurchaser:
+                if (val < 0.7) {
+                    mood = Mood.Balanced;
+                }
+                break;
+        }
     }
 }

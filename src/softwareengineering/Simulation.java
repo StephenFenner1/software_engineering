@@ -59,14 +59,15 @@ public class Simulation {
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(compFile));
-        } catch (FileNotFoundException e) {
-
-        }
+        } catch (FileNotFoundException e) { 
+            System.err.println("compFile not found...");
+        }        
+        
         //Read the file line by line
         while ((line = fileReader.readLine()) != null) {
             //Get all tokens available in line
-
             String[] tokens = line.split(DELIMITER);
+            //parse the tokens, and add them to the company ArrayList.
             compList.add(new Object[]{tokens[0], tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3])});
 
             //compMap.put(tokens[0], new Object[]{tokens[1], Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])});
@@ -85,19 +86,28 @@ public class Simulation {
         *****************************
         *****************************/
         
+        //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(clientFile));
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) { 
+            System.err.println("clientFile not found...");
+        }        
 
-        }
-
+        //Read the file line by line
         line = fileReader.readLine();
 
+        //Read only the first line (The client names)
         String[] titles = line.split(DELIMITER);
+        //length of the line
         int length = titles.length;
-        ArrayList<Integer> fuckt = null;
+        //ArrayList of the stock prices
+        ArrayList<Integer> stocks = null;
         
         for (String b : titles) {
+            /*b is the name of the clients,the object
+            * array contains the ArrayList of stock values
+            * the other two are the cash holdings and total.
+            */
             clientMap.put(b, new Object[]{new ArrayList<>(), 0, 0});
         }
         int i = 0;
@@ -110,19 +120,27 @@ public class Simulation {
             //compList.add(tokens);
             for (String b : titles) {
 
-                fuckt = (ArrayList) ((Object[]) clientMap.get(b))[0];
-                fuckt.add(Integer.parseInt(tokens[i]));
+                stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
+                stocks.add(Integer.parseInt(tokens[i]));
 
+                //if i == length -1 then reset i to 0,
+                //otherwise, incerement i by 1.
                 i = (i == length - 1) ? 0 : i + 1;
 
             }
 
         }
 
+        /*
+        * Remove the last two entries into the ArrayList
+        * These are the cash holdings and the stock total.
+        * (Had to use this loop as there was an error when
+        * trying to do this within the main while loop).
+        */
         for (String b : titles) {
-            fuckt = (ArrayList) ((Object[]) clientMap.get(b))[0];
-            ((Object[]) clientMap.get(b))[1] = fuckt.remove(fuckt.size() - 2);
-            ((Object[]) clientMap.get(b))[2] = fuckt.remove(fuckt.size() - 1);
+            stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
+            ((Object[]) clientMap.get(b))[1] = stocks.remove(stocks.size() - 2);
+            ((Object[]) clientMap.get(b))[2] = stocks.remove(stocks.size() - 1);
 
         }
 

@@ -9,18 +9,11 @@ package softwareengineering;
 public class Company {
 
     private final String companyName;
-    private final stockType stockType;
+    private final StockType stockType;
     private final int STOCK_TOTAL;
     private int supplyDemandRate;
     private int stockValue;
     private boolean bankrupt;
-    // Create new public enum stockType.
-    public enum stockType {
-        Food,
-        Hard,
-        Property,
-        Hitech
-    }
 
     /**
      * Constructor for Company class. Initialises a single company data class
@@ -31,7 +24,7 @@ public class Company {
      * @param stockValue    The value of the company's individual stock.
      * @param STOCK_TOTAL   The total number of stock issued by the company.
      */
-    public Company(String companyName, stockType stockType, int stockValue, int STOCK_TOTAL) {
+    public Company(String companyName, StockType stockType, int stockValue, int STOCK_TOTAL) {
         // Set companyName, stockType, stockValue and stockTotal using given values.
         this.companyName = companyName;
         this.stockType = stockType;
@@ -102,7 +95,7 @@ public class Company {
      * 
      * @return The type of stock used by the company.
      */
-    public stockType getStockType() {
+    public StockType getStockType() {
         return stockType;
     }
 

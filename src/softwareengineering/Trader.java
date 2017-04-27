@@ -1,14 +1,10 @@
 package softwareengineering;
 
-import java.util.List;
-
 /**
  *
  * @author Josh Hasan, Jamie Critcher
  */
 public abstract class Trader {
-    
-    public List<Portfolio> portfolios;
     
     public abstract int requestTrade(Company company, Portfolio portfolio);
     

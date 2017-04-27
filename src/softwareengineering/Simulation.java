@@ -1,10 +1,4 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package stockmarketui;
+package softwareengineering;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,36 +11,52 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
- * @author jh480
+ * Class that handles the stock market simulation. The initialSetup method, reads the
+ * input data, which is then used to create the Clients, Companies, Traders and 
+ * Portfolios. The run method runs the simulation.
  */
 public class Simulation {
 
-    Map compMap;
-    Map clientMap;
+    //Map compMap; 
+    ArrayList<Object[]> compList; //The list that stores the company information, read in from the initialization data
+    Map clientMap; //The map that stores the client information, read in from the initialization data
 
+    /*
+    * Constructor method for the Simulation class. Calls the relevant methods.
+    */
     Simulation() throws FileNotFoundException, IOException {
         initialSetup();
-
     }
 
+    /*
+    * Method to setup the simulation. Reads two separate CSV files, one Client
+    * and one Company, storing them in a Map and ArrayList respectively. The data
+    * is then used to create and the client, company, portfolio and trader objects
+    * needed to run the simulation.
+    */
     private void initialSetup() throws IOException {
         Setup setup = new Setup();
         File[] files = setup.getFile();
         int traderCount = setup.getTraderCount();
         File compFile = files[0];
         File clientFile = files[1];
-        compMap = new HashMap();
+        //compMap = new HashMap();
         clientMap = new HashMap();
         Object[] tempArray = new Object[3];
-        ArrayList<Object[]> compList = new ArrayList<>();
+        compList = new ArrayList<>();
 
         BufferedReader fileReader = null;
         //Delimiter used in CSV file
         final String DELIMITER = ",";
         String line;
+        
+        /*****************************
+        ******************************
+        *** Read the Company file. ***
+        ******************************
+        ******************************/
+        
         //Create the file reader
-
         try {
             fileReader = new BufferedReader(new FileReader(compFile));
         } catch (FileNotFoundException e) {
@@ -61,13 +71,20 @@ public class Simulation {
 
             //compMap.put(tokens[0], new Object[]{tokens[1], Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])});
         }
-        //System.out.println(((Object[])(compMap.get("WazooIt")))[0]);
+        /*System.out.println(((Object[])(compMap.get("WazooIt")))[0]);
 
-//        for (String[] b : compList) {
-//
-//            compMap.put(b[0], new Object[]{b[1], Integer.parseInt(b[2]),Integer.parseInt(b[3])});
-//
-//        }
+            for (String[] b : compList) {
+        
+                compMap.put(b[0], new Object[]{b[1], Integer.parseInt(b[2]),Integer.parseInt(b[3])});
+        
+             }*/
+        
+        /****************************
+        *****************************
+        *** Read the Client file. ***
+        *****************************
+        *****************************/
+        
         try {
             fileReader = new BufferedReader(new FileReader(clientFile));
         } catch (FileNotFoundException e) {
@@ -79,8 +96,8 @@ public class Simulation {
         String[] titles = line.split(DELIMITER);
         int length = titles.length;
         ArrayList<Integer> fuckt = null;
+        
         for (String b : titles) {
-
             clientMap.put(b, new Object[]{new ArrayList<>(), 0, 0});
         }
         int i = 0;
@@ -109,6 +126,9 @@ public class Simulation {
 
         }
 
+        /*
+        * Create Client objects.
+        */
         ArrayList<Client> clients = new ArrayList<>();
         Object[] tempClient;
         for (String b : titles) {
@@ -116,6 +136,9 @@ public class Simulation {
             clients.add(new Client(b, (int) tempClient[1], (int) tempClient[2]));
         }
 
+        /*
+        * Create Company objects.
+        */
         ArrayList<Company> companies = new ArrayList<>();
         Object[] tempComp;
 
@@ -133,14 +156,18 @@ public class Simulation {
         }
         
 
-  
+        /*
+        * Create Trader objects.
+        */
         ArrayList<Trader> traderList = new ArrayList<>();
         for (i = 0; i < traderCount; i++) {
             traderList.add(new RandomTrader());
         }
         
         
-
+        /*
+        * Create Portfolio objects.
+        */
         ArrayList<Portfolio> portList = new ArrayList<>();
 
         Object[] tempar;
@@ -153,7 +180,5 @@ public class Simulation {
             portList.add(p);
                                 
         }
-        
-
     }
 }

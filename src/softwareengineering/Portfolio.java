@@ -40,7 +40,7 @@ public class Portfolio {
     *
     * @return The trader object.
     */
-    public Client getTrader() {
+    public Trader getTrader() {
         return trader;
     }
 

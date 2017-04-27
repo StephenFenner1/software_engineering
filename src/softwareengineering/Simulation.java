@@ -104,7 +104,8 @@ public class Simulation {
         ArrayList<Integer> stocks = null;
         
         for (String b : titles) {
-            /*b is the name of the clients,the object
+            /*
+            * b is the name of the clients,the object
             * array contains the ArrayList of stock values
             * the other two are the cash holdings and total.
             */
@@ -119,7 +120,7 @@ public class Simulation {
 
             //compList.add(tokens);
             for (String b : titles) {
-
+                //parse the numbers after the headers
                 stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
                 stocks.add(Integer.parseInt(tokens[i]));
 

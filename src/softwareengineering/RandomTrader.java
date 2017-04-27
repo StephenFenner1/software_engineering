@@ -10,5 +10,17 @@ package softwareengineering;
  * @author stf23
  */
 public class RandomTrader extends Trader{
+    private String mood;
     
+    public RandomTrader(String mood) {
+        this.mood = mood;
+    }
+    
+    public String getMood() {
+        return mood;
+    }
+    
+    public void setMood(String mood) {
+        this.mood = mood;
+    }
 }

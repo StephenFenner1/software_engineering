@@ -12,13 +12,6 @@ package softwareengineering;
 public class RandomTrader extends Trader {
     
     /*
-     *  An enum initialisation used to define the traders mood.
-     */
-    public enum Mood {
-        Balanced, AggressiveSeller, AggressivePurchaser;
-    };
-    
-    /*
      *  The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
      */
     private Mood mood;

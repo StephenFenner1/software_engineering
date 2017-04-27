@@ -199,5 +199,10 @@ public class Simulation {
             portList.add(p);
                                 
         }
+        
+        /*
+        * Create Trading Exchange
+        */
+        TradingExchange tradingExchange = new TradingExchange(portList, companies);
     }
 }

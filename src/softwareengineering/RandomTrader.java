@@ -9,6 +9,9 @@ package softwareengineering;
  *
  * @author Josh Hasan
  */
+
+import java.util.List;
+
 public class RandomTrader extends Trader {
     
     /*
@@ -19,8 +22,9 @@ public class RandomTrader extends Trader {
     /**
      *  Constructor method for the Random Trader. Initialises all traders to have a balanced mood.
      */
-    public RandomTrader() {
+    public RandomTrader(List<Portfolio> portfolios) {
         this.mood = Mood.Balanced;
+        this.portfolios = portfolios;
     }
     
     /**

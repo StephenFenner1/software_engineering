@@ -11,6 +11,7 @@ public class RandomTrader extends Trader {
 
     private Mood mood;  // The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
     private Mood moodOverride;
+    private int id;
 
     /**
      * Constructor method for the Random Trader. Initialises all traders to have
@@ -19,6 +20,7 @@ public class RandomTrader extends Trader {
     public RandomTrader() {
         this.mood = Mood.Balanced;
         moodOverride = Mood.None;
+        id = ID++;
     }
 
     public void setMoodOverride(Mood mood) {
@@ -132,5 +134,10 @@ public class RandomTrader extends Trader {
                 }
                 break;
         }
+    }
+    
+    @Override
+    public int getID() {
+        return ID;
     }
 }

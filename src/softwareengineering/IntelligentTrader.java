@@ -6,12 +6,10 @@ package softwareengineering;
  * @author Josh Hasan, Jamie Critcher
  */
 
-import java.util.Random;
-
 public class IntelligentTrader extends Trader {
     
     /**
-     *  Constructor method for the Intelligent Trader.
+     *  Constructor method for the Random Trader.
      *  Initialises all traders to have a balanced mood.
      *  Stores all the portfolios relevant to this trader.
      */
@@ -27,17 +25,18 @@ public class IntelligentTrader extends Trader {
      */
     @Override
     public int requestTrade(Company company, Portfolio portfolio) {
-        Random rand = new Random();
-        float var = (3 * rand.nextFloat());
-        
-        if (var < 1) {
-            // Buy stocks.
-            var = rand.nextFloat();
-            return Math.round((var * (int)portfolio.getStockOwned().get(company)) / 100);
-        } else if (var < 2) {
-            // Sell stocks.
-            var = rand.nextFloat();
-            return -(Math.round((var * (int)portfolio.getStockOwned().get(company)) / 100));
+        if (portfolio.getClient().isCashingOut()) {
+            // If cashing out, try to sell all stock.
+            return (int)portfolio.getStockOwned().get(company);
+        } else if(compareRisk(portfolio.getRisk(), company.getRisk())) {
+            // Check market type of company.
+            if (company.getMarketType() == MarketType.Bear) {
+                // Buy stocks.
+                return Math.round((int)portfolio.getStockOwned().get(company) / 100);
+            } else {
+                // Sell stocks.
+                return -Math.round((int)portfolio.getStockOwned().get(company) / 100);
+            }
         }
         // Do not trade.
         return 0;

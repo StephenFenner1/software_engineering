@@ -11,21 +11,77 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Class that handles the stock market simulation. The initialSetup method, reads the
- * input data, which is then used to create the Clients, Companies, Traders and 
- * Portfolios. The run method runs the simulation.
+ * Class that handles the stock market simulation. The initialSetup method,
+ * reads the input data, which is then used to create the Clients, Companies,
+ * Traders and Portfolios. The run method runs the simulation.
  */
 public class Simulation {
-
+    //Create Portfolio objects.
+    private ArrayList<Portfolio> portList = new ArrayList<>();
+    
+    // Create Trader objects.
+    private ArrayList<RandomTrader> traderList = new ArrayList<>();
+    
+    // Create the Trading Exchange
+    private TradingExchange tradingExchange;
+    
     //Map compMap; 
-    ArrayList<Object[]> compList; //The list that stores the company information, read in from the initialization data
-    Map clientMap; //The map that stores the client information, read in from the initialization data
+    private ArrayList<Object[]> compList; //The list that stores the company information, read in from the initialization data
+    private Map clientMap; //The map that stores the client information, read in from the initialization data
 
     /*
     * Constructor method for the Simulation class. Calls the relevant methods.
-    */
-    Simulation() throws FileNotFoundException, IOException {
+     */
+    public Simulation() throws FileNotFoundException, IOException {
         initialSetup();
+    }
+
+    public void simulate() {
+        boolean closed = false;
+        int sun = 1;
+        int sat = 7;
+        final int goodFri = 104;
+        final int easterMon = 107;
+        final int christmas = 359;
+        final int boxing = 360;
+        int riskChange = 30;
+        int day = 1;
+        int time = 1;
+
+        while (day <= 365) {
+            closed = false;
+            if (day == sun) {
+                closed = true;
+                sun += 7;
+            } else if (day == sat) {
+                closed = true;
+                sat += 7;
+            } else if (day == goodFri || day == easterMon || day == christmas || day == boxing) {
+                closed = true;
+            }
+
+            if (day == riskChange) {
+                for (Portfolio portfolio : portList) {
+                    portfolio.updateClientRisk();
+                }
+                riskChange += 30;
+            }
+
+            if (!closed) {
+                while (time <= 28) {
+                    tradingExchange.handleTrades();
+                    for (Portfolio portfolio : portList) {
+                        portfolio.updatePortfolio();
+                    }
+                    time++;
+                }
+            }
+
+            for (RandomTrader trader : traderList) {
+                trader.changeMood();
+            }
+            day++;
+        }
     }
 
     /*
@@ -33,7 +89,7 @@ public class Simulation {
     * and one Company, storing them in a Map and ArrayList respectively. The data
     * is then used to create and the client, company, portfolio and trader objects
     * needed to run the simulation.
-    */
+     */
     private void initialSetup() throws IOException {
         Setup setup = new Setup();
         File[] files = setup.getFile();
@@ -49,20 +105,20 @@ public class Simulation {
         //Delimiter used in CSV file
         final String DELIMITER = ",";
         String line;
-        
-        /*****************************
-        ******************************
-        *** Read the Company file. ***
-        ******************************
-        ******************************/
-        
+
+        /**
+         * ***************************
+         ******************************
+         *** Read the Company file. *** *****************************
+         ****************************
+         */
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(compFile));
-        } catch (FileNotFoundException e) { 
+        } catch (FileNotFoundException e) {
             System.err.println("compFile not found...");
-        }        
-        
+        }
+
         //Read the file line by line
         while ((line = fileReader.readLine()) != null) {
             //Get all tokens available in line
@@ -73,25 +129,24 @@ public class Simulation {
             //compMap.put(tokens[0], new Object[]{tokens[1], Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])});
         }
         /*System.out.println(((Object[])(compMap.get("WazooIt")))[0]);
-
             for (String[] b : compList) {
         
                 compMap.put(b[0], new Object[]{b[1], Integer.parseInt(b[2]),Integer.parseInt(b[3])});
         
              }*/
-        
-        /****************************
-        *****************************
-        *** Read the Client file. ***
-        *****************************
-        *****************************/
-        
+
+        /**
+         * **************************
+         *****************************
+         *** Read the Client file. *** ****************************
+        ****************************
+         */
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(clientFile));
-        } catch (FileNotFoundException e) { 
+        } catch (FileNotFoundException e) {
             System.err.println("clientFile not found...");
-        }        
+        }
 
         //Read the file line by line
         line = fileReader.readLine();
@@ -102,13 +157,13 @@ public class Simulation {
         int length = titles.length;
         //ArrayList of the stock prices
         ArrayList<Integer> stocks = null;
-        
+
         for (String b : titles) {
             /*
             * b is the name of the clients,the object
             * array contains the ArrayList of stock values
             * the other two are the cash holdings and total.
-            */
+             */
             clientMap.put(b, new Object[]{new ArrayList<>(), 0, 0});
         }
         int i = 0;
@@ -137,7 +192,7 @@ public class Simulation {
         * These are the cash holdings and the stock total.
         * (Had to use this loop as there was an error when
         * trying to do this within the main while loop).
-        */
+         */
         for (String b : titles) {
             stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
             ((Object[]) clientMap.get(b))[1] = stocks.remove(stocks.size() - 2);
@@ -147,7 +202,7 @@ public class Simulation {
 
         /*
         * Create Client objects.
-        */
+         */
         ArrayList<Client> clients = new ArrayList<>();
         Object[] tempClient;
         for (String b : titles) {
@@ -157,7 +212,7 @@ public class Simulation {
 
         /*
         * Create Company objects.
-        */
+         */
         ArrayList<Company> companies = new ArrayList<>();
         Object[] tempComp;
 
@@ -170,47 +225,39 @@ public class Simulation {
         }
 
         ArrayList<String> compNames = new ArrayList<>();
-        for (i = 0 ; i < companies.size(); i++) {
+        for (i = 0; i < companies.size(); i++) {
             compNames.add(companies.get(i).getCompanyName());
         }
-        
 
-        /*
-        * Create Trader objects.
-        */
-        ArrayList<Trader> traderList = new ArrayList<>();
+
+        
         for (i = 0; i < traderCount; i++) {
             traderList.add(new RandomTrader());
         }
-        
-        
-        /*
-        * Create Portfolio objects.
-        */
-        ArrayList<Portfolio> portList = new ArrayList<>();
 
         Object[] tempar;
         for (Client c : clients) {
-            tempar = (Object[])(clientMap.get(c.getClientName()));
-            int randyTrad = ThreadLocalRandom.current().nextInt(1, traderCount + 1)-1;
-            Portfolio p = new Portfolio(c,compNames,(ArrayList<Integer>) tempar[0],traderList.get(randyTrad));
+            tempar = (Object[]) (clientMap.get(c.getClientName()));
+            int randyTrad = ThreadLocalRandom.current().nextInt(1, traderCount + 1) - 1;
+            Portfolio p = new Portfolio(c, compNames, (ArrayList<Integer>) tempar[0], traderList.get(randyTrad));
             p.printPortfolio();
             System.out.println("-----------------------------------------------------------------");
             portList.add(p);
-                                
+
         }
-       
-        /*
-        * Create the Trading Exchange
-        */
-        TradingExchange tradingExchange = new TradingExchange(portList, companies);
-        
-                 
+
+        tradingExchange = new TradingExchange(portList, companies);
+
         setup.setCompanies(companies);
         setup.setPortfolios(portList);
-        
-        
+
         setup.setVisible(true);
+
+    }
+    
+    public static void main(String[] args) throws IOException {
+        Simulation s = new Simulation();
         
+        s.simulate();
     }
 }

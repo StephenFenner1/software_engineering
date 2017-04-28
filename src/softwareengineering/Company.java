@@ -1,9 +1,11 @@
 package softwareengineering;
 
+import java.util.Random;
+
 /**
  * Storage class for company data. Stores the name, stock info and supply/demand
  * rate of a company and whether or not the company is bankrupt.
- * 
+ *
  * @author Jamie Critcher
  */
 public class Company {
@@ -14,15 +16,19 @@ public class Company {
     private int supplyDemandRate;
     private int stockValue;
     private boolean bankrupt;
+    private MarketType marketType;
+    private int marketChange;
+    private Risk risk;
+    private Risk riskOverride;
 
     /**
      * Constructor for Company class. Initialises a single company data class
      * given basic information about a company.
-     * 
-     * @param companyName   The name of the company.
-     * @param stockType     The type of stock used by the company.
-     * @param stockValue    The value of the company's individual stock.
-     * @param STOCK_TOTAL   The total number of stock issued by the company.
+     *
+     * @param companyName The name of the company.
+     * @param stockType The type of stock used by the company.
+     * @param stockValue The value of the company's individual stock.
+     * @param STOCK_TOTAL The total number of stock issued by the company.
      */
     public Company(String companyName, StockType stockType, int stockValue, int STOCK_TOTAL) {
         // Set companyName, stockType, stockValue and stockTotal using given values.
@@ -30,34 +36,60 @@ public class Company {
         this.stockType = stockType;
         this.stockValue = stockValue;
         this.STOCK_TOTAL = STOCK_TOTAL;
+        // Randomly assign a stock type to the company.
+        Random rand = new Random();
+        float var = (2 * rand.nextFloat());
+        if (var < 1) {
+            marketType = MarketType.Bear;
+        } else {
+            marketType = MarketType.Bull;
+        }
+        // Initialise risk based on stockType.
+        if (stockType == StockType.Food || stockType == StockType.Hard) {
+            risk = Risk.Low;
+        } else if (stockType == StockType.Hitech) {
+            risk = Risk.Moderate;
+        } else {
+            risk = Risk.High;
+        }
         // Initialise bankrupt as false.
         bankrupt = false;
         // Initialise supplyDemandRate as 0.
         supplyDemandRate = 0;
+        // Initialise marketChange to 0.
+        marketChange = 0;
+        // Set risk override to none.
+        riskOverride = Risk.None;
     }
-    
+
     /**
-     * Method to update the stock value of a company by the raw supply/demand
-     * rate, supply/demand rate reset to 0 afterwards.
+     * Method to update the stock value and market type of a company by the raw
+     * supply/demand rate, supply/demand rate reset to 0 afterwards.
      */
-    public void updateStockValue() {
+    public void updateCompany() {
+        updateMarketType();
         stockValue += supplyDemandRate;
+        if (stockValue < 0) {
+            stockValue = 0;
+        }
+        checkBankrupt();
+        marketChange = supplyDemandRate;
         setSupplyDemandRate(0);
     }
 
     /**
-     * Setter method to set the current supply/demand rate of the company.
-     * 
-     * @param supplyDemandRate  New supply/demand rate of the company.
+     * Private method to set the current supply/demand rate of the company.
+     *
+     * @param supplyDemandRate New supply/demand rate of the company.
      */
-    public void setSupplyDemandRate(int supplyDemandRate) {
+    private void setSupplyDemandRate(int supplyDemandRate) {
         this.supplyDemandRate = supplyDemandRate;
     }
 
     /**
      * Update method to update the current supply/demand rate of the company.
-     * 
-     * @param supplyDemandRate  Change in supply/demand rate of the company.
+     *
+     * @param supplyDemandRate Change in supply/demand rate of the company.
      */
     public void updateSupplyDemandRate(int supplyDemandRate) {
         this.supplyDemandRate += supplyDemandRate;
@@ -65,25 +97,34 @@ public class Company {
 
     /**
      * Setter method to set the current stock value of the company.
-     * 
-     * @param stockValue    New stock value of the company.
+     *
+     * @param stockValue New stock value of the company.
      */
     public void setStockValue(int stockValue) {
         this.stockValue = stockValue;
-    }  
+    }
 
     /**
-     * Setter method to set whether or not the company has gone bankrupt.
-     * 
-     * @param bankrupt  Whether or not the company is bankrupt.
+     * Private method
      */
-    public void setBankrupt(boolean bankrupt) {
-        this.bankrupt = bankrupt;
+    private void checkBankrupt() {
+        if (stockValue == 0) {
+            setBankrupt();
+        }
+    }
+
+    /**
+     * Private method to set the company to bankrupt.
+     *
+     * @param bankrupt Whether or not the company is bankrupt.
+     */
+    private void setBankrupt() {
+        bankrupt = true;
     }
 
     /**
      * Getter method to retrieve the stored name of the company.
-     * 
+     *
      * @return The name of the company.
      */
     public String getCompanyName() {
@@ -92,7 +133,7 @@ public class Company {
 
     /**
      * Getter method to retrieve the type of stock handled by the company.
-     * 
+     *
      * @return The type of stock used by the company.
      */
     public StockType getStockType() {
@@ -101,7 +142,7 @@ public class Company {
 
     /**
      * Getter method to retrieve the current supply/demand rate of the company.
-     * 
+     *
      * @return The current supply/demand rate of the company.
      */
     public int getSupplyDemandRate() {
@@ -110,7 +151,7 @@ public class Company {
 
     /**
      * Getter method to retrieve the current value of the company's stocks.
-     * 
+     *
      * @return The current value of the company's individual stocks.
      */
     public int getStockValue() {
@@ -119,19 +160,91 @@ public class Company {
 
     /**
      * Getter method to get the total number of stocks issued by the company.
-     * 
+     *
      * @return The total number of stocks issued by the company.
      */
     public int getSTOCK_TOTAL() {
         return STOCK_TOTAL;
-    }  
+    }
+
+    /**
+     * Getter method to get the recent change in the company stock price.
+     *
+     * @return The recent change in the company stock price.
+     */
+    public int getMarketChange() {
+        return marketChange;
+    }
+
+    /**
+     * Getter method to get the current market type of the company.
+     *
+     * @return The market type of the company (Bull/Bear).
+     */
+    public MarketType getMarketType() {
+        return marketType;
+    }
 
     /**
      * Getter method to find whether or not the company has gone bankrupt.
-     * 
+     *
      * @return Whether or not the company has gone bankrupt.
      */
     public boolean isBankrupt() {
         return bankrupt;
+    }
+
+    private void updateMarketType() {
+        if (supplyDemandRate < 0) {
+            if (marketType == MarketType.Bear) {
+                decreaseRisk();
+            } else {
+                increaseRisk();
+                marketType = MarketType.Bear;
+            }
+        } else if (supplyDemandRate > 0) {
+            if (marketType == MarketType.Bull) {
+                decreaseRisk();
+            } else {
+                increaseRisk();
+                marketType = MarketType.Bull;
+            }
+        }
+    }
+
+    private void increaseRisk() {
+        if (riskOverride == Risk.None) {
+            if (risk == Risk.Low) {
+                risk = Risk.Moderate;
+            } else if (risk == Risk.Moderate && (stockType != StockType.Food || stockType != StockType.Hard)) {
+                risk = Risk.High;
+            }
+        }
+    }
+
+    private void decreaseRisk() {
+        if (riskOverride == Risk.None) {
+            if (risk == Risk.High) {
+                risk = Risk.Moderate;
+            } else if (risk == Risk.Moderate && stockType != StockType.Property) {
+                risk = Risk.Low;
+            }
+        }
+    }
+    
+    public Risk getRisk() {
+        if (riskOverride == Risk.None) {
+            return risk;
+        } else {
+            return riskOverride;
+        }
+    }
+
+    public void setRiskOverride(Risk risk) {
+        riskOverride = risk;
+    }
+
+    public void removeRiskOverride() {
+        riskOverride = Risk.None;
     }
 }

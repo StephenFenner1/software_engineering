@@ -2,6 +2,7 @@ package softwareengineering;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  *  Class for the portfolio of the client. Takes the client and creates a portfolio for that client.

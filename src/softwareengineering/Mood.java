@@ -6,5 +6,5 @@ package softwareengineering;
  * @author Josh Hasan
  */
 public enum Mood {
-    Balanced, AggressiveSeller, AggressivePurchaser;
+    None, Balanced, AggressiveSeller, AggressivePurchaser;
 }

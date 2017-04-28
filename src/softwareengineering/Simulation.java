@@ -30,12 +30,15 @@ public class Simulation {
     private Map clientMap; //The map that stores the client information, read in from the initialization data
 
     /*
-    * Constructor method for the Simulation class. Calls the relevant methods.
+    * Constructor method for the Simulation class. Calls the initialSetup() method.
      */
     public Simulation() throws FileNotFoundException, IOException {
         initialSetup();
     }
 
+    /*
+    * Method that runs the simulation. 
+    */
     public void simulate() {
         boolean closed = false;
         int sun = 1;
@@ -69,7 +72,8 @@ public class Simulation {
 
             if (!closed) {
                 while (time <= 28) {
-                    tradingExchange.handleTrades();
+                    
+                    Exchange.handleTrades();
                     for (Portfolio portfolio : portList) {
                         portfolio.updatePortfolio();
                     }
@@ -107,11 +111,12 @@ public class Simulation {
         String line;
 
         /**
-         * ***************************
          ******************************
-         *** Read the Company file. *** *****************************
-         ****************************
-         */
+         ******************************
+         *** Read the Company file. *** 
+         ******************************
+         ******************************
+        **/
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(compFile));
@@ -128,19 +133,14 @@ public class Simulation {
 
             //compMap.put(tokens[0], new Object[]{tokens[1], Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])});
         }
-        /*System.out.println(((Object[])(compMap.get("WazooIt")))[0]);
-            for (String[] b : compList) {
         
-                compMap.put(b[0], new Object[]{b[1], Integer.parseInt(b[2]),Integer.parseInt(b[3])});
-        
-             }*/
-
         /**
-         * **************************
          *****************************
-         *** Read the Client file. *** ****************************
-        ****************************
-         */
+         *****************************
+         *** Read the Client file. *** 
+         *****************************
+         *****************************
+        **/
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(clientFile));
@@ -228,13 +228,17 @@ public class Simulation {
         for (i = 0; i < companies.size(); i++) {
             compNames.add(companies.get(i).getCompanyName());
         }
-
-
         
+        /*
+        * Create RandomTraders objects.
+        */        
         for (i = 0; i < traderCount; i++) {
             traderList.add(new RandomTrader());
         }
 
+        /*
+        * Create Portfolio objects.
+        */
         Object[] tempar;
         for (Client c : clients) {
             tempar = (Object[]) (clientMap.get(c.getClientName()));
@@ -246,8 +250,14 @@ public class Simulation {
 
         }
 
+        /*
+        * Create the Trading Exchange
+        */
         tradingExchange = new TradingExchange(portList, companies);
 
+        /*
+        * UI Setup.
+        */
         setup.setCompanies(companies);
         setup.setPortfolios(portList);
 
@@ -255,6 +265,9 @@ public class Simulation {
 
     }
     
+    /*
+    * Main method that calls the simulate method.
+    */
     public static void main(String[] args) throws IOException {
         Simulation s = new Simulation();
         

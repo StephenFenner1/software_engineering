@@ -11,7 +11,7 @@ import java.util.Random;
 public class IntelligentTrader extends Trader {
     
     /**
-     *  Constructor method for the Random Trader.
+     *  Constructor method for the Intelligent Trader.
      *  Initialises all traders to have a balanced mood.
      *  Stores all the portfolios relevant to this trader.
      */

@@ -199,10 +199,18 @@ public class Simulation {
             portList.add(p);
                                 
         }
-        
+       
         /*
         * Create the Trading Exchange
         */
+        TradingExchange tradingExchange = new TradingExchange(portList, companies);
+        
+                 
+        setup.setCompanies(companies);
+        setup.setPortfolios(portList);
+        
+        
+        setup.setVisible(true);
         
     }
 }

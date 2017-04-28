@@ -6,6 +6,8 @@ package softwareengineering;
  */
 public abstract class Trader {
     
+    protected static int ID = 0;
+    
     public abstract int requestTrade(Company company, Portfolio portfolio);
     
     public void makeTrade(Integer stocks, Company company, Portfolio portfolio) {
@@ -28,4 +30,6 @@ public abstract class Trader {
             return false;
         }
     }
+    
+    public abstract int getID();
 }

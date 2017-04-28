@@ -14,6 +14,7 @@ public class TradingExchange {
     List<Company> companies;
     Map<Portfolio, Integer> buyQueue;
     Map<Portfolio, Integer> sellQueue;
+    MarketType marketType;
 
     /**
      * Constructor to instantiate a new Trading Exchange.
@@ -25,6 +26,7 @@ public class TradingExchange {
     public TradingExchange(List<Portfolio> portfolios, List<Company> companies) {
         this.portfolios = portfolios;
         this.companies = companies;
+        marketType = MarketType.Stable;
     }
 
     /**
@@ -32,6 +34,7 @@ public class TradingExchange {
      * of the simulation.
      */
     public void handleTrades() {
+        int var = 0;
         // Loop through all companies.
         for (Company company : companies) {
             // Check that the company is not bankrupt.
@@ -43,9 +46,20 @@ public class TradingExchange {
                 // Clear the queues for the next company to use.
                 buyQueue.clear();
                 sellQueue.clear();
+                // Update the company.
+                company.updateCompany();
+                // Update current state of the market.
+                var += (company.getMarketChange() * company.getStockValue());
             }
         }
-
+        // Update current state of the market.
+        if (var < 0) {
+            marketType = MarketType.Bear;
+        } else if (var > 0) {
+            marketType = MarketType.Bull;
+        } else {
+            marketType = MarketType.Stable;
+        }
     }
 
     /**

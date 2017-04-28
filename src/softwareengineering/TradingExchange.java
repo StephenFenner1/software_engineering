@@ -10,11 +10,11 @@ import java.util.Map;
  */
 public class TradingExchange {
 
-    List<Portfolio> portfolios;
-    List<Company> companies;
-    Map<Portfolio, Integer> buyQueue;
-    Map<Portfolio, Integer> sellQueue;
-    MarketType marketType;
+    private List<Portfolio> portfolios;
+    private List<Company> companies;
+    private Map<Portfolio, Integer> buyQueue;
+    private Map<Portfolio, Integer> sellQueue;
+    private MarketType marketType;
 
     /**
      * Constructor to instantiate a new Trading Exchange.

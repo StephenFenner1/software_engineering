@@ -1,5 +1,6 @@
 package softwareengineering;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,10 @@ import java.util.Map;
  */
 public class TradingExchange {
 
-    private List<Portfolio> portfolios;
-    private List<Company> companies;
-    private Map<Portfolio, Integer> buyQueue;
-    private Map<Portfolio, Integer> sellQueue;
+    private final List<Portfolio> portfolios;
+    private final List<Company> companies;
+    private final Map<Portfolio, Integer> buyQueue;
+    private final Map<Portfolio, Integer> sellQueue;
     private MarketType marketType;
 
     /**
@@ -26,6 +27,8 @@ public class TradingExchange {
     public TradingExchange(List<Portfolio> portfolios, List<Company> companies) {
         this.portfolios = portfolios;
         this.companies = companies;
+        buyQueue = new HashMap<Portfolio, Integer>();
+        sellQueue = new HashMap<Portfolio, Integer>();
         marketType = MarketType.Stable;
     }
 
@@ -41,6 +44,10 @@ public class TradingExchange {
             if (!company.isBankrupt()) {
                 // Get and store trades in buyQueue and sellQueue.
                 getTrades(company);
+                System.out.println("------------------------------");
+                System.out.println(buyQueue.toString());
+                System.out.println(sellQueue.toString());
+                System.out.println("------------------------------");
                 // Make all available trades in buyQueue and sellQueue.
                 makeTrades(company);
                 // Clear the queues for the next company to use.
@@ -148,5 +155,9 @@ public class TradingExchange {
                 }
             }
         }
+    }
+    
+    public MarketType getMarketType() {
+        return marketType;
     }
 }

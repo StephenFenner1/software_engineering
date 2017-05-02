@@ -73,7 +73,7 @@ public class Simulation {
             if (!closed) {
                 while (time <= 28) {
                     
-                    Exchange.handleTrades();
+                    tradingExchange.handleTrades();
                     for (Portfolio portfolio : portList) {
                         portfolio.updatePortfolio();
                     }

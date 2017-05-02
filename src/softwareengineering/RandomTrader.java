@@ -44,26 +44,29 @@ public class RandomTrader extends Trader {
         // Check whether or not the client wants to cash out.
         if (portfolio.getClient().isCashingOut()) {
             // If cashing out, try to sell all stock.
-            return (int) portfolio.getStockOwned().get(company);
+            return (int) portfolio.getStockOwned().get(company.getCompanyName());
         } else if(compareRisk(portfolio.getRisk(), company.getRisk())) {
             Random rand = new Random();
             float var = (3 * rand.nextFloat());
-
+            
+            
+            
             if (var < 1) {
                 // Buy stocks.
                 var = rand.nextFloat();
                 if (moodOverride == Mood.None) {
-                    selectBuyMood(portfolio, mood, var);
+                    return selectBuyMood(portfolio, mood, var);
+                    
                 } else {
-                    selectBuyMood(portfolio, moodOverride, var);
+                    return selectBuyMood(portfolio, moodOverride, var);
                 }
             } else if (var < 2) {
                 // Sell stocks.
                 var = rand.nextFloat();
                 if (moodOverride == Mood.None) {
-                    selectSellMood(portfolio, mood, var);
+                    return selectSellMood(portfolio, mood, var);
                 } else {
-                    selectSellMood(portfolio, moodOverride, var);
+                    return selectSellMood(portfolio, moodOverride, var);
                 }
             }
         }

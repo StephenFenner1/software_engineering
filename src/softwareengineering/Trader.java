@@ -15,7 +15,7 @@ public abstract class Trader {
         portfolio.getClient().setCashHolding(portfolio.getClient().getCashHolding() - (stocks * company.getStockValue()));
         
         // Update number of stocks held.
-        int var = (int)portfolio.getStockOwned().get(company);
+        int var = (int)portfolio.getStockOwned().get(company.getCompanyName());
         portfolio.getStockOwned().replace(company, var + stocks);
     }
     

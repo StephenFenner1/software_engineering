@@ -11,7 +11,7 @@ public class RandomTrader extends Trader {
 
     private Mood mood;  // The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
     private Mood moodOverride;
-    private int id;
+    private final int id;
 
     /**
      * Constructor method for the Random Trader. Initialises all traders to have
@@ -44,15 +44,14 @@ public class RandomTrader extends Trader {
         // Check whether or not the client wants to cash out.
         if (portfolio.getClient().isCashingOut()) {
             // If cashing out, try to sell all stock.
-            return (int) portfolio.getStockOwned().get(company.getCompanyName());
+            return (int) portfolio.getStockOwned().get(company);
         } else if(compareRisk(portfolio.getRisk(), company.getRisk())) {
             Random rand = new Random();
             float var = (3 * rand.nextFloat());
             
-            
-            
             if (var < 1) {
                 // Buy stocks.
+                System.out.println("here fam");
                 var = rand.nextFloat();
                 if (moodOverride == Mood.None) {
                     return selectBuyMood(portfolio, mood, var);
@@ -75,13 +74,15 @@ public class RandomTrader extends Trader {
     }
 
     private int selectBuyMood(Portfolio portfolio, Mood mood, float var) {
+        System.out.println("get av: " + portfolio.getAvailableMoney());
+        System.out.println("var: " + var);
         switch (mood) {
-            case AggressiveSeller:
-                return Math.round((var * (int) portfolio.getClient().getCashHolding()) / 200);
+            case AggressiveSeller:  
+                return Math.round((var * (int) portfolio.getAvailableMoney()) * 2);
             case Balanced:
-                return Math.round((var * (int) portfolio.getClient().getCashHolding()) / 100);
+                return Math.round((var * (int) portfolio.getAvailableMoney()));
             case AggressivePurchaser:
-                return Math.round((var * (int) portfolio.getClient().getCashHolding()) / 50);
+                return Math.round((var * (int) portfolio.getAvailableMoney()) / 2);
             default:
                 return 0;
         }

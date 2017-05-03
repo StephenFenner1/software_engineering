@@ -199,13 +199,13 @@ public class Setup extends javax.swing.JFrame {
         });
         portfScrollPane.setViewportView(portfTable);
 
-        portfCashHLabel.setText("Cash Holdings: ");
+        portfCashHLabel.setText("Cash Holdings (£): ");
 
-        portfInitLabel.setText("Initial Value: ");
+        portfInitLabel.setText("Initial Value (£): ");
 
         portfTraderIDLabel.setText("Trader ID: ");
 
-        portfProfLabel.setText("Money Made: ");
+        portfProfLabel.setText("Worth Gained (£): ");
 
         portfTraderMoodLabel.setText("Trader Mood: ");
 
@@ -695,18 +695,19 @@ public class Setup extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) portfTable.getModel();
             model.getDataVector().removeAllElements();
             Portfolio selectedPort = (Portfolio) clientsCBox.getSelectedItem();
+            
             Map portf = selectedPort.getStockOwned();
 
             companies.stream().forEach((c) -> {
-                model.addRow(new Object[]{c.getCompanyName(), portf.get(c.getCompanyName())});
+                model.addRow(new Object[]{c.getCompanyName(), portf.get(c)});
             });
 
             Client selectedClient = selectedPort.getClient();
             System.out.println("Cashing Out: " + selectedClient.isCashingOut());
 
-            portfCashHTextField.setText(Integer.toString(selectedClient.getCashHolding()));
-            portfInitTextField.setText(Integer.toString(selectedClient.getInitialValue()));
-            portfProfitTextField.setText(Integer.toString(selectedClient.getCurrentValue() - selectedClient.getInitialValue()));
+            portfCashHTextField.setText(Integer.toString(selectedClient.getCashHolding() / 100));
+            portfInitTextField.setText(Integer.toString(selectedClient.getInitialValue() / 100));
+            portfProfitTextField.setText(Integer.toString((selectedClient.getCurrentValue() - selectedClient.getInitialValue()) / 100));
             Trader selectedTrader = selectedPort.getTrader();
             portfTraderIDTextField.setText(Integer.toString(selectedTrader.getID()));
 

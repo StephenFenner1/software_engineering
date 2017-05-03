@@ -42,6 +42,7 @@ public class RandomTrader extends Trader {
     @Override
     public int requestTrade(Company company, Portfolio portfolio) {
         // Check whether or not the client wants to cash out.
+        
         if (portfolio.getClient().isCashingOut()) {
             // If cashing out, try to sell all stock.
             return (int) portfolio.getStockOwned().get(company);
@@ -50,22 +51,21 @@ public class RandomTrader extends Trader {
             float var = (3 * rand.nextFloat());
             
             if (var < 1) {
-                // Buy stocks.
-                System.out.println("here fam");
+                // Buy stocks.                
                 var = rand.nextFloat();
                 if (moodOverride == Mood.None) {
-                    return selectBuyMood(portfolio, mood, var);
+                    return selectBuyMood(portfolio, company, mood, var);
                     
                 } else {
-                    return selectBuyMood(portfolio, moodOverride, var);
+                    return selectBuyMood(portfolio, company, moodOverride, var);
                 }
             } else if (var < 2) {
                 // Sell stocks.
                 var = rand.nextFloat();
                 if (moodOverride == Mood.None) {
-                    return selectSellMood(portfolio, mood, var);
+                    return selectSellMood(portfolio, company, mood, var);
                 } else {
-                    return selectSellMood(portfolio, moodOverride, var);
+                    return selectSellMood(portfolio, company, moodOverride, var);
                 }
             }
         }
@@ -73,29 +73,53 @@ public class RandomTrader extends Trader {
         return 0;
     }
 
-    private int selectBuyMood(Portfolio portfolio, Mood mood, float var) {
+    private int selectBuyMood(Portfolio portfolio, Company company, Mood mood, float var) {
         System.out.println("get av: " + portfolio.getAvailableMoney());
         System.out.println("var: " + var);
+        int amount = 0;
+        int stocks = 0;
         switch (mood) {
-            case AggressiveSeller:  
-                return Math.round((var * (int) portfolio.getAvailableMoney()) * 2);
+            case AggressiveSeller:
+                amount = Math.round((var * (int) portfolio.getAvailableMoney()) / 2);
+                stocks = (int)(amount / company.getStockValue());
+                System.out.println("Buy Stocks: " + stocks);
+                return stocks;
             case Balanced:
-                return Math.round((var * (int) portfolio.getAvailableMoney()));
+                amount = Math.round(var * (int) portfolio.getAvailableMoney());
+                stocks = (int)(amount / company.getStockValue());
+                System.out.println("Buy Stocks: " + stocks);
+                return stocks;
             case AggressivePurchaser:
-                return Math.round((var * (int) portfolio.getAvailableMoney()) / 2);
+                amount = Math.round((var * (int) portfolio.getAvailableMoney()) * 2);
+                stocks = (int)(amount / company.getStockValue());
+                System.out.println("Buy Stocks: " + stocks);
+                return stocks;
             default:
                 return 0;
         }
     }
 
-    private int selectSellMood(Portfolio portfolio, Mood mood, float var) {
+    private int selectSellMood(Portfolio portfolio, Company company, Mood mood, float var) {
+        System.out.println("get av: " + portfolio.getAvailableAssets(company));
+        System.out.println("var: " + var);
+        int amount = 0;
+        int stocks = 0;
         switch (mood) {
             case AggressiveSeller:
-                return Math.round((var * (int) portfolio.getClient().getCashHolding()) / 50);
+                stocks = Math.round((var * (int) portfolio.getAvailableAssets(company)) * 2);
+                //stocks = (int)(amount / company.getStockValue());
+                System.out.println("Sell Stocks: " + -stocks);
+                return -stocks;
             case Balanced:
-                return Math.round((var * (int) portfolio.getClient().getCashHolding()) / 100);
+                stocks = Math.round((var * (int) portfolio.getAvailableAssets(company)));
+                //stocks = (int)(amount / company.getStockValue());
+                System.out.println("Sell Stocks: " + -stocks);
+                return -stocks;
             case AggressivePurchaser:
-                return Math.round((var * (int) portfolio.getClient().getCashHolding()) / 200);
+                stocks = Math.round((var * (int) portfolio.getAvailableAssets(company)) / 2);
+                //stocks = (int)(amount / company.getStockValue());
+                System.out.println("Sell Stocks: " + -stocks);
+                return -stocks;
             default:
                 return 0;
         }
@@ -142,6 +166,6 @@ public class RandomTrader extends Trader {
     
     @Override
     public int getID() {
-        return ID;
+        return id;
     }
 }

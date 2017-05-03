@@ -16,15 +16,16 @@ import java.util.concurrent.ThreadLocalRandom;
  * Traders and Portfolios. The run method runs the simulation.
  */
 public class Simulation {
+
     //Create Portfolio objects.
     private ArrayList<Portfolio> portList = new ArrayList<>();
-    
+
     // Create Trader objects.
     private ArrayList<RandomTrader> traderList = new ArrayList<>();
-    
+
     // Create the Trading Exchange
     private TradingExchange tradingExchange;
-    
+
     //Map compMap; 
     private ArrayList<Object[]> compList; //The list that stores the company information, read in from the initialization data
     private Map clientMap; //The map that stores the client information, read in from the initialization data
@@ -38,7 +39,7 @@ public class Simulation {
 
     /*
     * Method that runs the simulation. 
-    */
+     */
     public void simulate() throws InterruptedException {
         boolean closed;
         int sun = 1;
@@ -53,7 +54,7 @@ public class Simulation {
 
         while (day <= 365) {
             System.out.println("Day: " + day);
-            
+
             closed = false;
             if (day == sun) {
                 closed = true;
@@ -73,17 +74,21 @@ public class Simulation {
             }
 
             if (!closed) {
+                //market open 
+                
                 while (time <= 28) {
-                    
+                    //15 minute iterations
+
                     tradingExchange.handleTrades();
-                    for (Portfolio portfolio : portList) {
+                    for (Portfolio portfolio : portList) {                        
                         portfolio.updatePortfolio();
                     }
                     time++;
-                    
+
                     try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {}
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                    }
                 }
             } else {
                 System.out.println("Trading exchange closed.");
@@ -93,8 +98,7 @@ public class Simulation {
                 trader.changeMood();
             }
             day++;
-            
-            
+
         }
     }
 
@@ -123,10 +127,10 @@ public class Simulation {
         /**
          ******************************
          ******************************
-         *** Read the Company file. *** 
-         ******************************
-         ******************************
-        **/
+         *** Read the Company file. *** *****************************
+         * *****************************
+        *
+         */
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(compFile));
@@ -143,14 +147,14 @@ public class Simulation {
 
             //compMap.put(tokens[0], new Object[]{tokens[1], Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])});
         }
-        
+
         /**
          *****************************
          *****************************
-         *** Read the Client file. *** 
-         *****************************
-         *****************************
-        **/
+         *** Read the Client file. *** ****************************
+         * ****************************
+        *
+         */
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(clientFile));
@@ -205,8 +209,8 @@ public class Simulation {
          */
         for (String b : titles) {
             stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
-            ((Object[]) clientMap.get(b))[1] = stocks.remove(stocks.size() - 2);
-            ((Object[]) clientMap.get(b))[2] = stocks.remove(stocks.size() - 1);
+            ((Object[]) clientMap.get(b))[1] = stocks.remove(stocks.size() - 2) * 100;
+            ((Object[]) clientMap.get(b))[2] = stocks.remove(stocks.size() - 1) * 100;
 
         }
 
@@ -233,22 +237,22 @@ public class Simulation {
 
             companies.add(new Company(name, d, (int) c[2], (int) c[3]));
         }
-/*
+        /*
         ArrayList<String> compNames = new ArrayList<>();
         for (i = 0; i < companies.size(); i++) {
             compNames.add(companies.get(i).getCompanyName());
         }
-*/
-        /*
+         */
+ /*
         * Create RandomTraders objects.
-        */        
+         */
         for (i = 0; i < traderCount; i++) {
             traderList.add(new RandomTrader());
         }
 
         /*
         * Create Portfolio objects.
-        */
+         */
         Object[] tempar;
         for (Client c : clients) {
             tempar = (Object[]) (clientMap.get(c.getClientName()));
@@ -262,25 +266,26 @@ public class Simulation {
 
         /*
         * Create the Trading Exchange
-        */
+         */
         tradingExchange = new TradingExchange(portList, companies);
 
         /*
         * UI Setup.
-        */
+         */
         setup.setCompanies(companies);
         setup.setPortfolios(portList);
 
         setup.setVisible(true);
 
     }
-    
+
     /*
     * Main method that calls the simulate method.
-    */
+     */
     public static void main(String[] args) throws IOException, InterruptedException {
-        Simulation s = new Simulation();
         
+        Simulation s = new Simulation();
+
         s.simulate();
     }
 }

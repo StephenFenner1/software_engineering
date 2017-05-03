@@ -30,15 +30,15 @@ public class IntelligentTrader extends Trader {
     public int requestTrade(Company company, Portfolio portfolio) {
         if (portfolio.getClient().isCashingOut()) {
             // If cashing out, try to sell all stock.
-            return (int)portfolio.getStockOwned().get(company.getCompanyName());
+            return (int)portfolio.getStockOwned().get(company);
         } else if(compareRisk(portfolio.getRisk(), company.getRisk())) {
             // Check market type of company.
             if (company.getMarketType() == MarketType.Bear) {
                 // Buy stocks.
-                return Math.round((int)portfolio.getStockOwned().get(company.getCompanyName()) / 100);
+                return Math.round((int) portfolio.getAvailableMoney());
             } else {
                 // Sell stocks.
-                return -Math.round((int)portfolio.getStockOwned().get(company.getCompanyName()) / 100);
+                return -Math.round(((int) portfolio.getAvailableAssets(company)));
             }
         }
         // Do not trade.

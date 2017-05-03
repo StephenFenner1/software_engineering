@@ -57,6 +57,7 @@ public class TradingExchange {
                 company.updateCompany();
                 // Update current state of the market.
                 var += (company.getMarketChange() * company.getStockValue());
+                
             }
         }
         // Update current state of the market.
@@ -86,7 +87,10 @@ public class TradingExchange {
                 sellQueue.put(portfolio, -trade);
             } else if (trade > 0) {
                 buyQueue.put(portfolio, trade);
+            } else {
+                System.out.println("nothonl");
             }
+            
         }
     }
 
@@ -108,9 +112,10 @@ public class TradingExchange {
             sellTotal += trade;
         }
         
-        // Update the supply/demand rate of the company with the raw difference.
+        // Update the supply/demand rate of the company with 1% of the difference.
         int dif = (buyTotal - sellTotal);
-        company.updateSupplyDemandRate(dif);
+        System.out.println("dif       " + dif);
+        company.updateSupplyDemandRate(dif / 100);
 
         if (buyTotal == sellTotal) {
             // Make all trades.

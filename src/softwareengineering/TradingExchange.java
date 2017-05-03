@@ -42,6 +42,7 @@ public class TradingExchange {
         for (Company company : companies) {
             // Check that the company is not bankrupt.
             if (!company.isBankrupt()) {
+                
                 // Get and store trades in buyQueue and sellQueue.
                 getTrades(company);
                 System.out.println("------------------------------");
@@ -112,6 +113,11 @@ public class TradingExchange {
             sellTotal += trade;
         }
         
+        System.out.println("Buy Queue: " + buyQueue.toString());
+        System.out.println(buyTotal);
+        System.out.println("Sell Queue: " + sellQueue.toString());
+        System.out.println(sellTotal);
+        
         // Update the supply/demand rate of the company with 1% of the difference.
         int dif = (buyTotal - sellTotal);
         System.out.println("dif       " + dif);
@@ -132,12 +138,12 @@ public class TradingExchange {
             }
             // Make as many purchases as possible.
             for (Portfolio portfolio : buyQueue.keySet()) {
-                if (buyTotal != 0) {
-                    if (buyTotal >= buyQueue.get(portfolio)) {
+                if (sellTotal != 0) {
+                    if (sellTotal >= buyQueue.get(portfolio)) {
                         portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
-                        buyTotal -= buyQueue.get(portfolio);
+                        sellTotal -= buyQueue.get(portfolio);
                     } else {
-                        portfolio.getTrader().makeTrade(buyTotal, company, portfolio);
+                        portfolio.getTrader().makeTrade(sellTotal, company, portfolio);
                         buyTotal = 0;
                     }
                 }
@@ -149,12 +155,12 @@ public class TradingExchange {
             }
             // Make as many sales as possible.
             for (Portfolio portfolio : sellQueue.keySet()) {
-                if (sellTotal != 0) {
-                    if (sellTotal >= sellQueue.get(portfolio)) {
+                if (buyTotal != 0) {
+                    if (buyTotal >= sellQueue.get(portfolio)) {
                         portfolio.getTrader().makeTrade(-sellQueue.get(portfolio), company, portfolio);
-                        sellTotal -= sellQueue.get(portfolio);
+                        buyTotal -= sellQueue.get(portfolio);
                     } else {
-                        portfolio.getTrader().makeTrade(-sellTotal, company, portfolio);
+                        portfolio.getTrader().makeTrade(-buyTotal, company, portfolio);
                         sellTotal = 0;
                     }
                 }

@@ -39,8 +39,8 @@ public class Simulation {
     /*
     * Method that runs the simulation. 
     */
-    public void simulate() {
-        boolean closed = false;
+    public void simulate() throws InterruptedException {
+        boolean closed;
         int sun = 1;
         int sat = 7;
         final int goodFri = 104;
@@ -48,10 +48,12 @@ public class Simulation {
         final int christmas = 359;
         final int boxing = 360;
         int riskChange = 30;
-        int day = 1;
+        int day = 2;
         int time = 1;
 
         while (day <= 365) {
+            System.out.println("Day: " + day);
+            
             closed = false;
             if (day == sun) {
                 closed = true;
@@ -78,13 +80,21 @@ public class Simulation {
                         portfolio.updatePortfolio();
                     }
                     time++;
+                    
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {}
                 }
+            } else {
+                System.out.println("Trading exchange closed.");
             }
 
             for (RandomTrader trader : traderList) {
                 trader.changeMood();
             }
             day++;
+            
+            
         }
     }
 
@@ -223,12 +233,12 @@ public class Simulation {
 
             companies.add(new Company(name, d, (int) c[2], (int) c[3]));
         }
-
+/*
         ArrayList<String> compNames = new ArrayList<>();
         for (i = 0; i < companies.size(); i++) {
             compNames.add(companies.get(i).getCompanyName());
         }
-        
+*/
         /*
         * Create RandomTraders objects.
         */        
@@ -243,7 +253,7 @@ public class Simulation {
         for (Client c : clients) {
             tempar = (Object[]) (clientMap.get(c.getClientName()));
             int randyTrad = ThreadLocalRandom.current().nextInt(1, traderCount + 1) - 1;
-            Portfolio p = new Portfolio(c, compNames, (ArrayList<Integer>) tempar[0], traderList.get(randyTrad));
+            Portfolio p = new Portfolio(c, companies, (ArrayList<Integer>) tempar[0], traderList.get(randyTrad));
             p.printPortfolio();
             System.out.println("-----------------------------------------------------------------");
             portList.add(p);
@@ -268,7 +278,7 @@ public class Simulation {
     /*
     * Main method that calls the simulate method.
     */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Simulation s = new Simulation();
         
         s.simulate();

@@ -32,13 +32,18 @@ public class Simulation {
 
     /**
     * Constructor method for the Simulation class. Calls the initialSetup() method.
+    * 
+    * @throws java.io.FileNotFoundException
+    * @throws java.io.IOException
     */
     public Simulation() throws FileNotFoundException, IOException {
         initialSetup();
     }
 
     /**
-    * Method that runs the simulation. 
+    * Method that runs the simulation.
+    * 
+    * @throws java.lang.InterruptedException
     */
     public void simulate() throws InterruptedException {
         boolean closed;
@@ -107,6 +112,8 @@ public class Simulation {
     * and one Company, storing them in a Map and ArrayList respectively. The data
     * is then used to create and the client, company, portfolio and trader objects
     * needed to run the simulation.
+    * 
+    * @throws java.io.IOException
     */
     private void initialSetup() throws IOException {
         Setup setup = new Setup();
@@ -277,6 +284,10 @@ public class Simulation {
 
     /**
     * Main method that runs the simulation.
+    * 
+    * @param args The command line arguments.
+    * @throws java.io.IOException
+    * @throws java.lang.InterruptedException    
     */
     public static void main(String[] args) throws IOException, InterruptedException {
         

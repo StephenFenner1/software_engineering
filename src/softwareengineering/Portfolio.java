@@ -1,184 +1,202 @@
 package softwareengineering;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * Class to handle a random trader and it's AI functionality.
+ *
+ * @author Josh Hasan, Jamie Critcher
+ */
 import java.util.Random;
 
-/**
- *  Class for the portfolio of the client. Takes the client and creates a portfolio for that client.
- *  The constructor creates the portfolio, the other methods allow to get information on the client
- *  and the contents of the portfolio.
- */
-public class Portfolio {
-    
-    private final Map<Company, Integer> stockOwned;         // Map(companyName, stockValue).
-    private final Client client;    // The client.
-    private final  Trader trader;   // The trader.
-    private Risk risk;              // Risk decided by the client.
-    private int availableMoney;
-    private int availableAssets;
-    
+public class RandomTrader extends Trader {
+
+    private Mood mood;  // The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}
+    private Mood moodOverride;
+    private final int id;
+
     /**
-     * Constructor method for the Portfolio class. Creates a new portfolio for the 
-     * specified Client. Initialises and fills a HashMap with the contents
-     * of two arrays (read from the initialisation data), also initialises the client
-     * that the portfolio belongs too.
-     *
-     * @param client         The client who owns the portfolio.
-     * @param companies      Array that contains the company respective to the client from the initialisation data.
-     * @param stocks         Array that contains the stock prices respective to the client from the initialisation data.
-     * @param trader         The trader assigned to the client.  
+     * Constructor method for the Random Trader. Initialises all traders to have
+     * a balanced mood. Stores all the portfolios relevant to this trader.
      */
-    public Portfolio(Client client, ArrayList<Company> companies, ArrayList<Integer>stocks, Trader trader) {
-        this.client = client;     
-        this.trader = trader;
-        stockOwned = new HashMap<Company, Integer>();
-        //both arrays have to be the same size
-        if(companies.size() == stocks.size()) {
-            //concat lists into map with key = companyName, value = stockValue;
-            for(int i= 0; i < companies.size(); i++){
-                stockOwned.put(companies.get(i), stocks.get(i));
-            }
-        }
-        // Randomly assign a risk to the Portfolio.
-        Random rand = new Random();
-        float var = (5 * rand.nextFloat());
-        if (var < 1) {
-            risk = Risk.Low;
-        } else if ( var < 4) {
-            risk = Risk.Moderate;
-        } else {
-            risk = Risk.High;
-        }
-        updateAvailableMoney();
-        //updateAvailableAssets();
-    } 
-    
-    /**
-     * Getter method for the trader that the portfolio belongs to
-     *
-     * @return The trader object.
-     */
-    @Override
-    public String toString(){
-        return client.getClientName();
-    }
-    public Trader getTrader() {
-        return trader;
-    }
-    
-    /**
-     * Randomly updates the clients risk.
-     */
-    public void updateClientRisk() {
-        // Randomly assign a risk to the Portfolio.
-        Random rand = new Random();
-        float var = (5 * rand.nextFloat());
-        if (var < 1) {
-            risk = Risk.Low;
-        } else if ( var < 4) {
-            risk = Risk.Moderate;
-        } else {
-            risk = Risk.High;
-        }
-    }
-    
-    /**
-     * Public method to update the current value of a portfolios client.
-     */
-    public void updatePortfolio() {
-        // Get the total value of the clients owned stocks.
-        int var = 0;
-        for (Company company : stockOwned.keySet()) {
-            var += getPrice(company);
-        }
-        // Set the clients current value to their stock value + cash holding.
-        client.setCurrentValue(client.getCashHolding() + var);
-        updateAvailableMoney();
+    public RandomTrader() {
+        this.mood = Mood.Balanced;
+        moodOverride = Mood.None;
+        id = ID++;
     }
 
     /**
-     * Getter method for the client that the portfolio belongs to.
-     *
-     * @return The client object.
-     */
-    public Client getClient() {
-        return client;
-    }
-    
-    /*
-    * Getter method for the stockOwned Map
-    *
-    * @return The stockOwned Map.
-    */
-    public Map getStockOwned() {
-        return stockOwned;
-    }
-    
-    /**
-     * Gets the price of the stock of a company given in the clients portfolio
-     *
-     * @param  company  The company name.
-     * @return          The price of the companies stock.      
-     */
-    public int getPrice(Company company) {
-        return stockOwned.get(company)*company.getStockValue();
-    }
-    
-    /**
-     * Getter method for the clients risk
+     * Setter method for moodOverride
      * 
-     * @return the clients risk value.
+     * @param mood  the new value for moodOverride.
      */
-    public Risk getRisk() {
-        return risk;
+    public void setMoodOverride(Mood mood) {
+        moodOverride = mood;
     }
-    
+
     /**
-     * Method to print the contents of the portfolio in the format:
-     * ("Company name" : "Stock price").
+     * Sets moveOverride to none.
      */
-    public void printPortfolio() {
-        for(Object company : stockOwned.keySet()) {
-            String key = company.toString();
-            String value = stockOwned.get(company).toString();
-            System.out.println(key + " : " + value);
+    public void removeMoodOverride() {
+        moodOverride = Mood.None;
+    }
+
+    /**
+     * Public method to request a trade decision on a specific company and
+     * portfolio.
+     *
+     * @param company The company that traders are trading stocks in.
+     * @param portfolio The portfolio the traders is controlling.
+     * @return The number of stocks to trade in the company.
+     */
+    @Override
+    public int requestTrade(Company company, Portfolio portfolio) {
+        // Check whether or not the client wants to cash out.
+        
+        if (portfolio.getClient().isCashingOut()) {
+            // If cashing out, try to sell all stock.
+            return (int) portfolio.getStockOwned().get(company);
+        } else if(compareRisk(portfolio.getRisk(), company.getRisk())) {
+            Random rand = new Random();
+            float var = (3 * rand.nextFloat());
+            
+            if (var < 1) {
+                // Buy stocks.                
+                var = rand.nextFloat();
+                if (moodOverride == Mood.None) {
+                    return selectBuyMood(portfolio, company, mood, var);
+                    
+                } else {
+                    return selectBuyMood(portfolio, company, moodOverride, var);
+                }
+            } else if (var < 2) {
+                // Sell stocks.
+                var = rand.nextFloat();
+                if (moodOverride == Mood.None) {
+                    return selectSellMood(portfolio, company, mood, var);
+                } else {
+                    return selectSellMood(portfolio, company, moodOverride, var);
+                }
+            }
+        }
+        // Do not trade.
+        return 0;
+    }
+
+    /**
+     * Method to select the buy mood of the trader.
+     * 
+     * @param portfolio The portfolio the traders is controlling.
+     * @param company   The company that traders are trading stocks in.
+     * @param mood      The selected mood.
+     * @param var       Constant used in the amount variable logic.
+     * @return          The number of stocks to trade in the company.
+     */
+    private int selectBuyMood(Portfolio portfolio, Company company, Mood mood, float var) {
+        System.out.println("get av: " + portfolio.getAvailableMoney());
+        System.out.println("var: " + var);
+        int amount = 0;
+        int stocks = 0;
+        switch (mood) {
+            case AggressiveSeller:
+                amount = Math.round((var * (int) portfolio.getAvailableMoney()) / 2);
+                stocks = (int)(amount / company.getStockValue());
+                System.out.println("Buy Stocks: " + stocks);
+                return stocks;
+            case Balanced:
+                amount = Math.round(var * (int) portfolio.getAvailableMoney());
+                stocks = (int)(amount / company.getStockValue());
+                System.out.println("Buy Stocks: " + stocks);
+                return stocks;
+            case AggressivePurchaser:
+                amount = Math.round((var * (int) portfolio.getAvailableMoney()) * 2);
+                stocks = (int)(amount / company.getStockValue());
+                System.out.println("Buy Stocks: " + stocks);
+                return stocks;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * Method to select the sell mood of the trader.
+     * 
+     * @param portfolio The portfolio the traders is controlling.
+     * @param company   The company that traders are trading stocks in.
+     * @param mood      The selected mood.
+     * @param var       Constant used in the amount variable logic.
+     * @return          The number of stocks to trade in the company.
+     */
+    private int selectSellMood(Portfolio portfolio, Company company, Mood mood, float var) {
+        System.out.println("get av: " + portfolio.getAvailableAssets(company));
+        System.out.println("var: " + var);
+        int amount = 0;
+        int stocks = 0;
+        switch (mood) {
+            case AggressiveSeller:
+                stocks = Math.round((var * (int) portfolio.getAvailableAssets(company)) * 2);
+                //stocks = (int)(amount / company.getStockValue());
+                System.out.println("Sell Stocks: " + -stocks);
+                return -stocks;
+            case Balanced:
+                stocks = Math.round((var * (int) portfolio.getAvailableAssets(company)));
+                //stocks = (int)(amount / company.getStockValue());
+                System.out.println("Sell Stocks: " + -stocks);
+                return -stocks;
+            case AggressivePurchaser:
+                stocks = Math.round((var * (int) portfolio.getAvailableAssets(company)) / 2);
+                //stocks = (int)(amount / company.getStockValue());
+                System.out.println("Sell Stocks: " + -stocks);
+                return -stocks;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * Getter method for the mood of the trader.
+     *
+     * @return The mood of the trader.
+     */
+    public Mood GetMood() {
+        return mood;
+    }
+
+    /**
+     * public method to change the mood of the trader.
+     */
+    public void changeMood() {
+        Random rand = new Random();
+        float val = rand.nextFloat();
+
+        switch (mood) {
+            case AggressiveSeller:
+                if (val > 0.4) {
+                    mood = Mood.Balanced;
+                }
+                break;
+
+            case Balanced:
+                if (val < 0.1) {
+                    mood = Mood.AggressiveSeller;
+                } else if (val > 0.9) {
+                    mood = Mood.AggressivePurchaser;
+                }
+                break;
+
+            case AggressivePurchaser:
+                if (val < 0.7) {
+                    mood = Mood.Balanced;
+                }
+                break;
         }
     }
     
     /**
-     * Updates the Clients available money.
-     */
-    public void updateAvailableMoney() {
-        availableMoney = (getClient().getCashHolding() / 100) ;
-    }
-    
-    /**
-     * Getter method for the clients available money.
+     * Getter method to get the ID of the trader.
      * 
-     * @return the clients available money.
+     * @return the traders id.
      */
-    public int getAvailableMoney() {
-        return availableMoney;
-    }
-    
-    /* public void updateAvailableAssets() {
-       availableAssets = 0;
-       for (Company company : stockOwned.keySet()) {
-           availableAssets += stockOwned.get(company) * company.getStockValue();
-       }
-       availableAssets = availableAssets / 100;
-    }*/
-    
-    /**
-     * Returns the companies available assets.
-     * Assets are defined as stocks/100.
-     * 
-     * @param company   The company
-     * @return the assets of a certain company.
-     */
-    public int getAvailableAssets(Company company) {
-        return stockOwned.get(company) / 100;
+    @Override
+    public int getID() {
+        return id;
     }
 }

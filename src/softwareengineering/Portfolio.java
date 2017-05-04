@@ -26,8 +26,9 @@ public class Portfolio {
      * that the portfolio belongs too.
      *
      * @param client         The client who owns the portfolio.
-     * @param companies        Array that contains the company respective to the client from the initialisation data.
+     * @param companies      Array that contains the company respective to the client from the initialisation data.
      * @param stocks         Array that contains the stock prices respective to the client from the initialisation data.
+     * @param trader         The trader assigned to the client.  
      */
     public Portfolio(Client client, ArrayList<Company> companies, ArrayList<Integer>stocks, Trader trader) {
         this.client = client;     
@@ -53,6 +54,7 @@ public class Portfolio {
         updateAvailableMoney();
         //updateAvailableAssets();
     } 
+    
     /**
      * Getter method for the trader that the portfolio belongs to
      *
@@ -66,6 +68,9 @@ public class Portfolio {
         return trader;
     }
     
+    /**
+     * Randomly updates the clients risk.
+     */
     public void updateClientRisk() {
         // Randomly assign a risk to the Portfolio.
         Random rand = new Random();
@@ -121,6 +126,11 @@ public class Portfolio {
         return stockOwned.get(company)*company.getStockValue();
     }
     
+    /**
+     * Getter method for the clients risk
+     * 
+     * @return the clients risk value.
+     */
     public Risk getRisk() {
         return risk;
     }
@@ -137,22 +147,37 @@ public class Portfolio {
         }
     }
     
+    /**
+     * Updates the Clients available money.
+     */
     public void updateAvailableMoney() {
         availableMoney = (getClient().getCashHolding() / 100) ;
     }
     
+    /**
+     * Getter method for the clients available money.
+     * 
+     * @return the clients available money.
+     */
     public int getAvailableMoney() {
         return availableMoney;
     }
     
-    //public void updateAvailableAssets() {
-    //    availableAssets = 0;
-    //    for (Company company : stockOwned.keySet()) {
-    //        availableAssets += stockOwned.get(company) * company.getStockValue();
-    //    }
-    //    availableAssets = availableAssets / 100;
-    //}
+    /* public void updateAvailableAssets() {
+       availableAssets = 0;
+       for (Company company : stockOwned.keySet()) {
+           availableAssets += stockOwned.get(company) * company.getStockValue();
+       }
+       availableAssets = availableAssets / 100;
+    }*/
     
+    /**
+     * Returns the companies available assets.
+     * Assets are defined as stocks/100.
+     * 
+     * @param company   The company
+     * @return the assets of a certain company.
+     */
     public int getAvailableAssets(Company company) {
         return stockOwned.get(company) / 100;
     }

@@ -5,14 +5,12 @@ package softwareengineering;
  * 
  * @author Josh Hasan, Jamie Critcher
  */
-
 public class IntelligentTrader extends Trader {
     private int id;
     
     /**
-     *  Constructor method for the Random Trader.
-     *  Initialises all traders to have a balanced mood.
-     *  Stores all the portfolios relevant to this trader.
+     *  Constructor method for the Intelligent Trader.
+     *  Initialises the trader a new ID.
      */
     public IntelligentTrader() {
         id = ID++;
@@ -43,8 +41,13 @@ public class IntelligentTrader extends Trader {
         }
         // Do not trade.
         return 0;
-    }
+    }  
     
+    /**
+     * Getter method for the traders ID.
+     * 
+     * @return the traders ID.
+     */
     @Override
     public int getID() {
         return ID;

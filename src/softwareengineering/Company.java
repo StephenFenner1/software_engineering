@@ -105,7 +105,8 @@ public class Company {
     }
 
     /**
-     * Private method
+     * Checks whether the company is bankrupt. If it is, sets
+     * bankrupt boolean to be true.     * 
      */
     private void checkBankrupt() {
         if (stockValue == 0) {
@@ -194,6 +195,9 @@ public class Company {
         return bankrupt;
     }
 
+    /**
+     * Updates the market type between bear and bull.
+     */
     private void updateMarketType() {
         if (supplyDemandRate < 0) {
             if (marketType == MarketType.Bear) {
@@ -212,6 +216,10 @@ public class Company {
         }
     }
 
+    /**
+    * Increases the risk value.
+    * Low -> Moderate, Moderate -> High.
+    */
     private void increaseRisk() {
         if (riskOverride == Risk.None) {
             if (risk == Risk.Low) {
@@ -222,6 +230,10 @@ public class Company {
         }
     }
 
+    /**
+    * Decreases the risk value.
+    * High -> Moderate, Moderate -> Low.
+    */
     private void decreaseRisk() {
         if (riskOverride == Risk.None) {
             if (risk == Risk.High) {
@@ -230,8 +242,12 @@ public class Company {
                 risk = Risk.Low;
             }
         }
-    }
+    }    
     
+    /**
+     * Returns the risk.
+     * @return returns risk if riskOverride is none, otherwise returns riskOverride.
+     */
     public Risk getRisk() {
         if (riskOverride == Risk.None) {
             return risk;
@@ -240,10 +256,18 @@ public class Company {
         }
     }
 
+    /**
+     * Sets riskOverride to risk
+     * 
+     * @param risk  The new value of riskOverride. 
+     */
     public void setRiskOverride(Risk risk) {
         riskOverride = risk;
     }
 
+    /**
+     *  Sets riskOverride to none.
+     */
     public void removeRiskOverride() {
         riskOverride = Risk.None;
     }

@@ -1,12 +1,12 @@
 package softwareengineering;
 
+import java.util.Random;
+
 /**
  * Class to handle a random trader and it's AI functionality.
  *
  * @author Josh Hasan, Jamie Critcher
  */
-import java.util.Random;
-
 public class RandomTrader extends Trader {
 
     private Mood mood;  // The selling mood of the Random Trader - {Balanced | AggressivePurchaser | AggressiveSeller}

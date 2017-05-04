@@ -42,7 +42,7 @@ public abstract class Trader {
      * 
      * @param clientRisk    The client risk.
      * @param companyRisk   The company risk.
-     * @return              Returns true if client risk is >= to company risk otherwise return false.                   
+     * @return              Returns true if client risk is bigger or equal to company risk otherwise return false.                   
      */
     protected boolean compareRisk(Risk clientRisk, Risk companyRisk) {
         if (clientRisk == Risk.High) {

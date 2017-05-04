@@ -99,7 +99,7 @@ public class TradingExchange {
      * Private method used to make all trades for the portfolios for an
      * individual company for a single 15-minute period of the simulation.
      * 
-     * @param company 
+     * @param company The current company that traders are trading stocks in.
      */
     private void makeTrades(Company company) {
         // Create local variables to store the total stocks being bought/sold.
@@ -168,6 +168,11 @@ public class TradingExchange {
         }
     }
     
+    /**
+     * Getter method to get the value of marketType.
+     * 
+     * @return the value of marketType. 
+     */
     public MarketType getMarketType() {
         return marketType;
     }

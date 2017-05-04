@@ -36,6 +36,11 @@ public class Client {
         this.cashingOut = false;
     }
 
+    /**
+     * Overwritten toString method
+     * 
+     * @return the client name. 
+     */
     @Override
     public String toString() {
         return clientName;

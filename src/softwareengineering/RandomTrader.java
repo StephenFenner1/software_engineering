@@ -23,10 +23,18 @@ public class RandomTrader extends Trader {
         id = ID++;
     }
 
+    /**
+     * Setter method for moodOverride
+     * 
+     * @param mood  the new value for moodOverride.
+     */
     public void setMoodOverride(Mood mood) {
         moodOverride = mood;
     }
 
+    /**
+     * Sets moveOverride to none.
+     */
     public void removeMoodOverride() {
         moodOverride = Mood.None;
     }
@@ -35,9 +43,9 @@ public class RandomTrader extends Trader {
      * Public method to request a trade decision on a specific company and
      * portfolio.
      *
-     * @param company The company that traders are trading stocks in.
+     * @param company   The company that traders are trading stocks in.
      * @param portfolio The portfolio the traders is controlling.
-     * @return The number of stocks to trade in the company.
+     * @return          The number of stocks to trade in the company.
      */
     @Override
     public int requestTrade(Company company, Portfolio portfolio) {
@@ -78,8 +86,16 @@ public class RandomTrader extends Trader {
         return 0;
     }
 
+    /**
+     * Method to select the buy mood of the trader.
+     * 
+     * @param portfolio The portfolio the traders is controlling.
+     * @param company   The company that traders are trading stocks in.
+     * @param mood      The selected mood.
+     * @param var       Constant used in the amount variable logic.
+     * @return          The number of stocks to trade in the company.
+     */
     private int selectBuyMood(Portfolio portfolio, Company company, Mood mood, float var) {
-
         int amount = 0;
         int stocks = 0;
         switch (mood) {
@@ -103,9 +119,16 @@ public class RandomTrader extends Trader {
         }
     }
 
-    private int selectSellMood(Portfolio portfolio, Company company, Mood mood, float var) {
-
- 
+    /**
+     * Method to select the sell mood of the trader.
+     * 
+     * @param portfolio The portfolio the traders is controlling.
+     * @param company   The company that traders are trading stocks in.
+     * @param mood      The selected mood.
+     * @param var       Constant used in the amount variable logic.
+     * @return          The number of stocks to trade in the company.
+     */
+    private int selectSellMood(Portfolio portfolio, Company company, Mood mood, float var) { 
         int stocks = 0;
         switch (mood) {
             case AggressiveSeller:

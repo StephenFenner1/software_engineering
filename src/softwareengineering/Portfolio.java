@@ -7,8 +7,8 @@ import java.util.Random;
 
 /**
  *  Class for the portfolio of the client. Takes the client and creates a portfolio for that client.
- *  The constructor creates the portfolio, the other methods allow to get information on the client
- *  and the contents of the portfolio.
+ *  The constructor creates the portfolio, the other methods allow to get information on the client,
+ *  the trader and the contents of the portfolio.
  */
 public class Portfolio {
     
@@ -26,8 +26,9 @@ public class Portfolio {
      * that the portfolio belongs too.
      *
      * @param client         The client who owns the portfolio.
-     * @param companies        Array that contains the company respective to the client from the initialisation data.
+     * @param companies      Array that contains the company respective to the client from the initialisation data.
      * @param stocks         Array that contains the stock prices respective to the client from the initialisation data.
+     * @param trader         The trader assigned to the portfolio.
      */
     public Portfolio(Client client, ArrayList<Company> companies, ArrayList<Integer>stocks, Trader trader) {
         this.client = client;     
@@ -53,19 +54,29 @@ public class Portfolio {
         updateAvailableMoney();
         //updateAvailableAssets();
     } 
+    
     /**
-     * Getter method for the trader that the portfolio belongs to
-     *
-     * @return The trader object.
+     * Overwritten toString method
+     * 
+     * @return The clients name.
      */
     @Override
     public String toString(){
         return client.getClientName();
     }
+    
+    /**
+     * Getter method for the trader that the portfolio belongs to
+     *
+     * @return The trader object.
+     */
     public Trader getTrader() {
         return trader;
     }
     
+    /**
+     * Randomly updates the clients risk.
+     */
     public void updateClientRisk() {
         // Randomly assign a risk to the Portfolio.
         Random rand = new Random();
@@ -121,6 +132,11 @@ public class Portfolio {
         return stockOwned.get(company)*company.getStockValue();
     }
     
+    /**
+     * Getter method for the clients risk
+     * 
+     * @return the clients risk. 
+     */
     public Risk getRisk() {
         return risk;
     }
@@ -137,10 +153,18 @@ public class Portfolio {
         }
     }
     
+    /**
+     * Method to update the clients available money.
+     */
     public void updateAvailableMoney() {
         availableMoney = (getClient().getCashHolding() / 100) ;
     }
     
+    /**
+     * Getter method for the clients available money
+     * 
+     * @return the clients available money.
+     */
     public int getAvailableMoney() {
         return availableMoney;
     }
@@ -153,6 +177,12 @@ public class Portfolio {
     //    availableAssets = availableAssets / 100;
     //}
     
+    /**
+     * Getter method for a companies assets.
+     * 
+     * @param company   The company name.
+     * @return          A companies asset.
+     */
     public int getAvailableAssets(Company company) {
         return stockOwned.get(company) / 100;
     }

@@ -45,10 +45,7 @@ public class TradingExchange {
                 
                 // Get and store trades in buyQueue and sellQueue.
                 getTrades(company);
-                System.out.println("------------------------------");
-                System.out.println(buyQueue.toString());
-                System.out.println(sellQueue.toString());
-                System.out.println("------------------------------");
+
                 // Make all available trades in buyQueue and sellQueue.
                 makeTrades(company);
                 // Clear the queues for the next company to use.
@@ -88,9 +85,7 @@ public class TradingExchange {
                 sellQueue.put(portfolio, -trade);
             } else if (trade > 0) {
                 buyQueue.put(portfolio, trade);
-            } else {
-                System.out.println("nothonl");
-            }
+            } 
             
         }
     }
@@ -120,7 +115,7 @@ public class TradingExchange {
         
         // Update the supply/demand rate of the company with 1% of the difference.
         int dif = (buyTotal - sellTotal);
-        System.out.println("dif       " + dif);
+
         company.updateSupplyDemandRate(dif / 100);
 
         if (buyTotal == sellTotal) {

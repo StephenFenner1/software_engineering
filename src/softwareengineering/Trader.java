@@ -57,9 +57,23 @@ public abstract class Trader {
     }
     
     /**
-     * Getter method for the ID of the trader
-     * 
-     * @return the traders ID.
+     * Getter method for the traders ID.
+     *
+     * @return The traders ID.
      */
     public abstract int getID();
+    
+    /**
+     * Getter method for the traders type.
+     * 
+     * @return The traders type.
+     */
+    public abstract String getType();
+    
+    /**
+     * Getter method for the traders mood.
+     * 
+     * @return The traders mood.
+     */
+    public abstract String getMood();
 }

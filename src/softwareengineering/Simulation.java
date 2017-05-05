@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -21,30 +22,36 @@ public class Simulation {
     private ArrayList<Portfolio> portList = new ArrayList<>();
 
     // Create Trader objects.
-    private ArrayList<RandomTrader> traderList = new ArrayList<>();
+    private ArrayList<Trader> traderList = new ArrayList<>();
+
+    // Create Client objects.
+    private ArrayList<Client> clients = new ArrayList<>();
 
     // Create the Trading Exchange
     private TradingExchange tradingExchange;
+
+    Setup setup;
 
     //Map compMap; 
     private ArrayList<Object[]> compList; //The list that stores the company information, read in from the initialization data
     private Map clientMap; //The map that stores the client information, read in from the initialization data
 
     /**
-    * Constructor method for the Simulation class. Calls the initialSetup() method.
-    * 
-    * @throws java.io.FileNotFoundException
-    * @throws java.io.IOException
-    */
+     * Constructor method for the Simulation class. Calls the initialSetup()
+     * method.
+     *
+     * @throws java.io.FileNotFoundException
+     * @throws java.io.IOException
+     */
     public Simulation() throws FileNotFoundException, IOException {
         initialSetup();
     }
 
     /**
-    * Method that runs the simulation.
-    * 
-    * @throws java.lang.InterruptedException
-    */
+     * Method that runs the simulation.
+     *
+     * @throws java.lang.InterruptedException
+     */
     public void simulate() throws InterruptedException {
         boolean closed;
         int sun = 1;
@@ -54,11 +61,18 @@ public class Simulation {
         final int christmas = 359;
         final int boxing = 360;
         int riskChange = 30;
-        int day = 2;
+        int day = 1;
         int time = 1;
+        boolean isClosed;
+        Random rand = new Random();
 
         while (day <= 365) {
             System.out.println("Day: " + day);
+
+            isClosed = setup.isPaused();
+            while (isClosed) {
+                isClosed = setup.isPaused();
+            }
 
             closed = false;
             if (day == sun) {
@@ -80,45 +94,57 @@ public class Simulation {
 
             if (!closed) {
                 //market open 
-                
+
                 while (time <= 28) {
                     //15 minute iterations
 
                     tradingExchange.handleTrades();
-                    for (Portfolio portfolio : portList) {                        
+                    for (Portfolio portfolio : portList) {
                         portfolio.updatePortfolio();
                     }
                     time++;
 
+                    /*
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                     }
+                     */
                 }
+                time = 1;
             } else {
                 System.out.println("Trading exchange closed.");
             }
 
-            for (RandomTrader trader : traderList) {
-                trader.changeMood();
+            for (Trader trader : traderList) {
+                if (trader instanceof RandomTrader) {
+                    ((RandomTrader) trader).changeMood();
+                }
             }
-            day++;
 
+            for (Client client : clients) {
+                if (0 == rand.nextInt(4000)) {
+                    client.setCashingOut(true);
+                }
+            }
+
+            day++;
         }
     }
 
     /**
-    * Method to setup the simulation. Reads two separate CSV files, one Client
-    * and one Company, storing them in a Map and ArrayList respectively. The data
-    * is then used to create and the client, company, portfolio and trader objects
-    * needed to run the simulation.
-    * 
-    * @throws java.io.IOException
-    */
+     * Method to setup the simulation. Reads two separate CSV files, one Client
+     * and one Company, storing them in a Map and ArrayList respectively. The
+     * data is then used to create and the client, company, portfolio and trader
+     * objects needed to run the simulation.
+     *
+     * @throws java.io.IOException
+     */
     private void initialSetup() throws IOException {
-        Setup setup = new Setup();
+        setup = new Setup();
         File[] files = setup.getFile();
         int traderCount = setup.getTraderCount();
+
         File compFile = files[0];
         File clientFile = files[1];
         //compMap = new HashMap();
@@ -137,8 +163,7 @@ public class Simulation {
          *** Read the Company file. *** 
          ******************************
          ******************************       
-        */
-        
+         */
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(compFile));
@@ -151,7 +176,12 @@ public class Simulation {
             //Get all tokens available in line
             String[] tokens = line.split(DELIMITER);
             //parse the tokens, and add them to the company ArrayList.
-            compList.add(new Object[]{tokens[0], tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3])});
+            try {
+                compList.add(new Object[]{tokens[0], tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3])});
+            } catch (java.lang.ArrayIndexOutOfBoundsException e) {
+                System.out.println("Incorrect file format.");
+                System.exit(0);
+            }
 
             //compMap.put(tokens[0], new Object[]{tokens[1], Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])});
         }
@@ -162,8 +192,7 @@ public class Simulation {
          *** Read the Client file. *** 
          *****************************
          *****************************        
-        */
-        
+         */
         //Create the file reader
         try {
             fileReader = new BufferedReader(new FileReader(clientFile));
@@ -186,7 +215,7 @@ public class Simulation {
             * b is the name of the clients,the object
             * array contains the ArrayList of stock values
             * the other two are the cash holdings and total.
-            */
+             */
             clientMap.put(b, new Object[]{new ArrayList<>(), 0, 0});
         }
         int i = 0;
@@ -197,15 +226,21 @@ public class Simulation {
             String[] tokens = line.split(DELIMITER);
 
             //compList.add(tokens);
-            for (String b : titles) {
-                //parse the numbers after the headers
-                stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
-                stocks.add(Integer.parseInt(tokens[i]));
+            try {
+                for (String b : titles) {
+                    //parse the numbers after the headers
+                    stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
 
-                //if i == length -1 then reset i to 0,
-                //otherwise, incerement i by 1.
-                i = (i == length - 1) ? 0 : i + 1;
+                    stocks.add(Integer.parseInt(tokens[i]));
 
+                    //if i == length -1 then reset i to 0,
+                    //otherwise, incerement i by 1.
+                    i = (i == length - 1) ? 0 : i + 1;
+
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Incorrect file format.");
+                System.exit(0);
             }
 
         }
@@ -215,7 +250,7 @@ public class Simulation {
         * These are the cash holdings and the stock total.
         * (Had to use this loop as there was an error when
         * trying to do this within the main while loop).
-        */
+         */
         for (String b : titles) {
             stocks = (ArrayList) ((Object[]) clientMap.get(b))[0];
             ((Object[]) clientMap.get(b))[1] = stocks.remove(stocks.size() - 2) * 100;
@@ -225,8 +260,7 @@ public class Simulation {
 
         /*
         * Create Client objects.
-        */
-        ArrayList<Client> clients = new ArrayList<>();
+         */
         Object[] tempClient;
         for (String b : titles) {
             tempClient = (Object[]) clientMap.get(b);
@@ -235,9 +269,8 @@ public class Simulation {
 
         /*
         * Create Company objects.
-        */
+         */
         ArrayList<Company> companies = new ArrayList<>();
-        Object[] tempComp;
 
         for (Object[] c : compList) {
             String name = (String) c[0];
@@ -245,52 +278,56 @@ public class Simulation {
             //StockType d = StockType.valueOf((String) tempComp[0]);
             companies.add(new Company(name, d, (int) c[2], (int) c[3]));
         }
-        
+
+        /*
+        * Create intelligentTrader object.
+         */
+        traderList.add(new IntelligentTrader());
+
         /*
         * Create randomTrader objects.
-        */
-        for (i = 0; i < traderCount; i++) {
+         */
+        for (i = 1; i < traderCount; i++) {
             traderList.add(new RandomTrader());
         }
 
         /*
         * Create Portfolio objects.
          */
-        Object[] tempar;
+        Object[] tempClientDetails;
+        int traderI = 0;
         for (Client c : clients) {
-            tempar = (Object[]) (clientMap.get(c.getClientName()));
-            int randyTrad = ThreadLocalRandom.current().nextInt(1, traderCount + 1) - 1;
-            Portfolio p = new Portfolio(c, companies, (ArrayList<Integer>) tempar[0], traderList.get(randyTrad));
-            p.printPortfolio();
-            System.out.println("-----------------------------------------------------------------");
-            portList.add(p);
+            tempClientDetails = (Object[]) (clientMap.get(c.getClientName()));
 
+            //int randyTrad = ThreadLocalRandom.current().nextInt(1, traderCount + 1) - 1;
+            Portfolio p = new Portfolio(c, companies, (ArrayList<Integer>) tempClientDetails[0], traderList.get(traderI));
+            traderI = (traderI >= traderCount - 1) ? 1 : traderI + 1;
+            portList.add(p);
         }
 
         /*
         * Create the Trading Exchange
-        */
+         */
         tradingExchange = new TradingExchange(portList, companies);
+        setup.setTradingExchange(tradingExchange);
 
         /*
         * UI Setup.
-        */
+         */
         setup.setCompanies(companies);
         setup.setPortfolios(portList);
 
         setup.setVisible(true);
-
     }
 
     /**
-    * Main method that runs the simulation.
-    * 
-    * @param args The command line arguments.
-    * @throws java.io.IOException
-    * @throws java.lang.InterruptedException    
-    */
+     * Main method that runs the simulation.
+     *
+     * @param args The command line arguments.
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+     */
     public static void main(String[] args) throws IOException, InterruptedException {
-        
         Simulation s = new Simulation();
 
         s.simulate();

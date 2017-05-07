@@ -3,7 +3,7 @@ package softwareengineering;
 /**
  * An enumerator used to define a level of risk.
  * 
- * @author Jamie Critcher
+ * @author Group 26
  */
 public enum Risk {
     

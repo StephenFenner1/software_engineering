@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package softwareengineering;
 
 import java.awt.event.ActionEvent;
@@ -19,7 +14,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * UI File
  * @author Group 26
  */
 public class Setup extends javax.swing.JFrame {

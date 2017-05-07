@@ -3,7 +3,7 @@ package softwareengineering;
 /**
  * An enumerator initialisation used to define the type of stock being traded.
  *
- * @author Jamie Critcher
+ * @author Group 26
  */
 public enum StockType {
     

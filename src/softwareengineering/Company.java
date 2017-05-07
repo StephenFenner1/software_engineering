@@ -6,7 +6,7 @@ import java.util.Random;
  * Storage class for company data. Stores the name, stock info and supply/demand
  * rate of a company and whether or not the company is bankrupt.
  *
- * @author Jamie Critcher
+ * @author Group 26
  */
 public class Company {
 

@@ -3,7 +3,7 @@ package softwareengineering;
 /**
  * An enumerator initialisation used to define the traders mood.
  * 
- * @author Josh Hasan
+ * @author Group 26
  */
 public enum Mood {
     

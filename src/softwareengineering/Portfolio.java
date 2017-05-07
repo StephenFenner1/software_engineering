@@ -9,6 +9,8 @@ import java.util.Random;
  *  Class for the portfolio of the client. Takes the client and creates a portfolio for that client.
  *  The constructor creates the portfolio, the other methods allow to get information on the client
  *  and the contents of the portfolio.
+ * 
+ * @author Group 26
  */
 public class Portfolio {
     
@@ -17,7 +19,6 @@ public class Portfolio {
     private final  Trader trader;   // The trader.
     private Risk risk;              // Risk decided by the client.
     private int availableMoney;
-    private int availableAssets;
     
     /**
      * Constructor method for the Portfolio class. Creates a new portfolio for the 
@@ -51,7 +52,6 @@ public class Portfolio {
             risk = Risk.High;
         }
         updateAvailableMoney();
-        //updateAvailableAssets();
     } 
     /**
      * Getter method for the trader that the portfolio belongs to
@@ -121,32 +121,35 @@ public class Portfolio {
         return stockOwned.get(company)*company.getStockValue();
     }
     
+    /**
+     * Returns the client's specified risk
+     * @return risk
+     */
     public Risk getRisk() {
         return risk;
     }
-    
-    /**
-     * Method to print the contents of the portfolio in the format:
-     * ("Company name" : "Stock price").
-     */
+       
 
-    
+    /**
+     * Updates the available money for the trader to purchase with
+     */
     public void updateAvailableMoney() {
         availableMoney = (getClient().getCashHolding() / 100) ;
     }
     
+    /**
+     * Return available money for this client
+     * @return available money
+     */
     public int getAvailableMoney() {
         return availableMoney;
     }
     
-    //public void updateAvailableAssets() {
-    //    availableAssets = 0;
-    //    for (Company company : stockOwned.keySet()) {
-    //        availableAssets += stockOwned.get(company) * company.getStockValue();
-    //    }
-    //    availableAssets = availableAssets / 100;
-    //}
-    
+    /**
+     * Returns The amount of stocks for the trader to sell
+     * @param company The company the client owns stocks in
+     * @return The amount of stocks for the trader to sell
+     */
     public int getAvailableAssets(Company company) {
         return stockOwned.get(company) / 100;
     }

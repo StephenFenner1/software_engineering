@@ -4,7 +4,7 @@ package softwareengineering;
  * An enumerator used to define a companies market type (Bull/Bear). 
  * All companies start with a randomly generated market type.
  * 
- * @author Jamie Critcher
+ * @author Group 26
  */
 public enum MarketType {
     

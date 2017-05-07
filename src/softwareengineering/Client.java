@@ -4,7 +4,7 @@ package softwareengineering;
  * Storage class for client data. Stores the name, value and cash holding of a
  * client and whether or not the client is cashing out.
  *
- * @author Jamie Critcher
+ * @author Group 26
  */
 public class Client {
 
@@ -25,15 +25,12 @@ public class Client {
      */
     public Client(String clientName, int cashHolding, int initialValue) {
         // Initialise clientName, cashHolding and initialValue to given values.
-        this.clientName = clientName;
-        this.cashHolding = cashHolding;
-        this.initialValue = initialValue;
-        // Initialise currentValue to match initialValue.
-        this.currentValue = initialValue;
-        // Set expectedValue to a 10% return.
-        this.expectedValue = (int) (initialValue * 1.1);
-        // Initialise cashingOut as false.
-        this.cashingOut = false;
+        this.clientName = clientName; //Initialise clientName to given name
+        this.cashHolding = cashHolding; //Initialise cashHolding to given cash holding
+        this.initialValue = initialValue; //Initialise initialValue to given initial value
+        this.currentValue = initialValue; // Initialise currentValue to match initialValue.     
+        this.expectedValue = (int) (initialValue * 1.1);// Set expectedValue to a 10% return.        
+        this.cashingOut = false; // Initialise cashingOut as false.
     }
 
     /**

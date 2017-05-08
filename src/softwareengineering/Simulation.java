@@ -21,7 +21,7 @@ import java.util.Random;
  * Class that handles the stock market simulation. The initialSetup method,
  * reads the input data, which is then used to create the Clients, Companies,
  * Traders and Portfolios. The run method runs the simulation.
- * 
+ *
  * @author Group 26
  */
 public class Simulation {
@@ -71,7 +71,7 @@ public class Simulation {
     /**
      * Method that runs the simulation.
      *
-     * @throws java.lang.InterruptedException
+     * @throws java.lang.InterruptedException 
      */
     public void simulate() throws InterruptedException {
         boolean closed;
@@ -107,11 +107,10 @@ public class Simulation {
 
         while (day <= 365) {
             //Loop through each day of the year
-            
-            
+
             //Sets and displays the date and time as appropriate
             lt = LocalTime.parse("09:00");
-            setup.setDateLabel(sdf.format(calender.getTime())); 
+            setup.setDateLabel(sdf.format(calender.getTime()));
             setup.setTimeLabel(df.format(lt.plusMinutes(15 * (time - 1))));
 
             isClosed = setup.isPaused(); //Whether the simulation should be paused
@@ -120,12 +119,10 @@ public class Simulation {
                 isClosed = setup.isPaused();
             }
 
-            
-            
             /*
             Checks whether the stock market should be closed on the current day.
-            */
-            closed = false; 
+             */
+            closed = false;
             if (day == sun) {
                 //Sunday
                 closed = true;
@@ -141,7 +138,7 @@ public class Simulation {
 
             /*
             Updates the each client's risk approx. every month
-            */
+             */
             if (day == riskChange) {
                 for (Portfolio portfolio : portList) {
                     portfolio.updateClientRisk();
@@ -185,7 +182,6 @@ public class Simulation {
                      */
                 }
                 time = 1; //Reset time for the next day
-                
 
             } else {
                 //The market is closed
@@ -237,15 +233,15 @@ public class Simulation {
                 if (currentMarketState > 0 && runningMarketState > 0) {
                     //Both bull
                     marketStateCount++;
-                    
+
                 } else if (currentMarketState < 0 && runningMarketState < 0) {
                     //Both bear
                     marketStateCount++;
-                    
+
                 } else if (currentMarketState == 0 && runningMarketState == 0) {
                     //Both stable
                     marketStateCount++;
-                    
+
                 } else {
                     //Different types
                     marketStateCount = 0;
@@ -277,8 +273,8 @@ public class Simulation {
                         //Current state from BEAR to STABLE/BULL
                         tradingExchange.setMarketType(MarketType.Stable);
                         marketStateCount = 0;
-                    } else if (currentMarketState!=0 && runningMarketState == 0){
-                        marketStateCount=0;  
+                    } else if (currentMarketState != 0 && runningMarketState == 0) {
+                        marketStateCount = 0;
                         tradingExchange.setMarketType(MarketType.Stable);
                     }
 
@@ -322,8 +318,9 @@ public class Simulation {
 
     /**
      * Creates all the companies
+     *
      * @param compFile the company file chosen by user
-     * @throws IOException 
+     * @throws IOException
      */
     private void makeCompanies(File compFile) throws IOException {
         String line;
@@ -353,11 +350,12 @@ public class Simulation {
         }
 
     }
-    
+
     /**
      * Makes the clients using client file provided.
+     *
      * @param clientFile the client file chosen by user
-     * @throws IOException 
+     * @throws IOException
      */
     private void makeClients(File clientFile) throws IOException {
         BufferedReader fileReader = null;
@@ -429,6 +427,7 @@ public class Simulation {
 
     /**
      * Randomly assigns traders to clients
+     *
      * @param traderCount the amount of traders chosen by user
      */
     private void assignTraders(int traderCount) {
@@ -442,6 +441,7 @@ public class Simulation {
 
     /**
      * Creates the portfolios for all clients
+     *
      * @param traderCount the amount of traders specified
      */
     private void makePortfolios(int traderCount) {

@@ -22,7 +22,6 @@ public class TradingExchange {
     private int currentTime;
     private int currentDay;
 
-
     /**
      * Constructor to instantiate a new Trading Exchange. Only one Trading
      * Exchange should exist per simulation.
@@ -44,19 +43,19 @@ public class TradingExchange {
      * Public method used to handle all trades for a single 15-minute period of
      * the simulation.
      *
-     * @param setup
-     * @param day
-     * @param time
+     * @param setup The GUI
+     * @param day The day of the trade
+     * @param time The time of the trade
      */
     public void handleTrades(Setup setup, int day, int time) {
         currentTime = 0;
         this.setup = setup;
         this.day = day;
-        this.time = time;       
+        this.time = time;
 
         // Loop through all companies.
         for (Company company : companies) {
-            
+
             // Check that the company is not bankrupt.
             if (!company.isBankrupt()) {
 
@@ -65,15 +64,13 @@ public class TradingExchange {
 
                 // Make all available trades in buyQueue and sellQueue.
                 makeTrades(company);
-                
+
                 // Clear the queues for the next company to use.
                 buyQueue.clear();
                 sellQueue.clear();
-                
+
                 // Update the company.
                 company.updateCompany();
-              
-                
 
             }
         }
@@ -118,11 +115,11 @@ public class TradingExchange {
         for (Integer trade : sellQueue.values()) {
             sellTotal += trade;
         }
-        
+
         /*
         Creates the message to be displayed on the trading exchange GUI
-        */
-        String message = ""; 
+         */
+        String message = "";
         if (currentDay != day) {
             message += "\n------------------------------------------------------------ Day: " + day + " ------------------------------------------------------------";
             currentDay = day;
@@ -132,16 +129,14 @@ public class TradingExchange {
             currentTime = time;
         }
 
-        
-        message+="\n--------------------Company: " + company.getCompanyName() + "--------------------\n";
-        message+="Wanting to buy: " + buyQueue.toString();
-        message+="\nTotal wanting to buy: " + buyTotal;
-        message+="\nWanting to sell: " + sellQueue.toString();
-        message+="\nTotal wanting to sell: " + sellTotal+"\n";
-        
+        message += "\n--------------------Company: " + company.getCompanyName() + "--------------------\n";
+        message += "Wanting to buy: " + buyQueue.toString();
+        message += "\nTotal wanting to buy: " + buyTotal;
+        message += "\nWanting to sell: " + sellQueue.toString();
+        message += "\nTotal wanting to sell: " + sellTotal + "\n";
+
         setup.printMessage(message);
-        
-        
+
         // Update the supply/demand rate of the company with 1% of the difference.
         int dif = (buyTotal - sellTotal);
         company.updateSupplyDemandRate(dif / 100);
@@ -149,7 +144,7 @@ public class TradingExchange {
             // Make all trades.
             for (Portfolio portfolio : buyQueue.keySet()) {
                 //For each portfolio, make all possible purchases
-                portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);                
+                portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
             }
             for (Portfolio portfolio : sellQueue.keySet()) {
                 //For each portfolio make all possible sales
@@ -161,12 +156,11 @@ public class TradingExchange {
                 //For each portfolio, make all possible sales
                 portfolio.getTrader().makeTrade(-sellQueue.get(portfolio), company, portfolio);
 
-
             }
-            
+
             for (Portfolio portfolio : buyQueue.keySet()) {
                 // Make as many purchases as possible.
-                
+
                 if (sellTotal != 0) {
                     if (sellTotal >= buyQueue.get(portfolio)) {
                         portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
@@ -187,9 +181,8 @@ public class TradingExchange {
                 //For each portfolio, make all possible purchases
                 portfolio.getTrader().makeTrade(buyQueue.get(portfolio), company, portfolio);
 
-
             }
-            
+
             for (Portfolio portfolio : sellQueue.keySet()) {
                 // Make as many sales as possible.
                 if (buyTotal != 0) {
@@ -218,22 +211,24 @@ public class TradingExchange {
     public MarketType getMarketType() {
         return marketType;
     }
-    
+
     /**
      * Sets the market type
+     *
      * @param marketType the market type
      */
-    public void setMarketType(MarketType marketType){
+    public void setMarketType(MarketType marketType) {
         this.marketType = marketType;
     }
-    
+
     /**
      * Updates the market state using the stock values
+     *
      * @return the specific state of the market as a value
      */
     public int updateMarketState() {
         int var = 0;
-        
+
         // Loop through all companies.
         for (Company company : companies) {
             // Check that the company is not bankrupt.
@@ -244,6 +239,5 @@ public class TradingExchange {
         }
         return var;
     }
-
 
 }

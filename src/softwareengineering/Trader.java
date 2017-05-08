@@ -83,6 +83,7 @@ public abstract class Trader {
 
     /**
      * Returns the total amount of money made by a trader for all its clients
+     *
      * @return the amount of money made by this trader for all clients
      */
     public abstract BigInteger getMoneyMade();

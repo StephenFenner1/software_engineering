@@ -82,7 +82,7 @@ public class Company {
      *
      * @param supplyDemandRate New supply/demand rate of the company.
      */
-    private void setSupplyDemandRate(int supplyDemandRate) {
+    public void setSupplyDemandRate(int supplyDemandRate) {
         this.supplyDemandRate = supplyDemandRate;
     }
 
@@ -105,10 +105,10 @@ public class Company {
     }
 
     /**
-     * Checks whether the company is bankrupt. If it is, sets
-     * bankrupt boolean to be true.     * 
+     * Checks whether the company is bankrupt. If it is, sets bankrupt boolean
+     * to be true. *
      */
-    private void checkBankrupt() {
+    public void checkBankrupt() {
         if (stockValue == 0) {
             setBankrupt();
         }
@@ -116,10 +116,8 @@ public class Company {
 
     /**
      * Private method to set the company to bankrupt.
-     *
-     * @param bankrupt Whether or not the company is bankrupt.
      */
-    private void setBankrupt() {
+    public void setBankrupt() {
         bankrupt = true;
     }
 
@@ -198,7 +196,7 @@ public class Company {
     /**
      * Updates the market type between bear and bull.
      */
-    private void updateMarketType() {
+    public void updateMarketType() {
         if (supplyDemandRate < 0) {
             if (marketType == MarketType.Bear) {
                 decreaseRisk();
@@ -217,10 +215,9 @@ public class Company {
     }
 
     /**
-    * Increases the risk value.
-    * Low -> Moderate, Moderate -> High.
-    */
-    private void increaseRisk() {
+     * Increases the risk value. Low Moderate, Moderate High.
+     */
+    public void increaseRisk() {
         if (riskOverride == Risk.None) {
             if (risk == Risk.Low) {
                 risk = Risk.Moderate;
@@ -231,10 +228,9 @@ public class Company {
     }
 
     /**
-    * Decreases the risk value.
-    * High -> Moderate, Moderate -> Low.
-    */
-    private void decreaseRisk() {
+     * Decreases the risk value. High - Moderate, Moderate - Low.
+     */
+    public void decreaseRisk() {
         if (riskOverride == Risk.None) {
             if (risk == Risk.High) {
                 risk = Risk.Moderate;
@@ -242,11 +238,13 @@ public class Company {
                 risk = Risk.Low;
             }
         }
-    }    
-    
+    }
+
     /**
      * Returns the risk.
-     * @return returns risk if riskOverride is none, otherwise returns riskOverride.
+     *
+     * @return returns risk if riskOverride is none, otherwise returns
+     * riskOverride.
      */
     public Risk getRisk() {
         if (riskOverride == Risk.None) {
@@ -258,15 +256,15 @@ public class Company {
 
     /**
      * Sets riskOverride to risk
-     * 
-     * @param risk  The new value of riskOverride. 
+     *
+     * @param risk The new value of riskOverride.
      */
     public void setRiskOverride(Risk risk) {
         riskOverride = risk;
     }
 
     /**
-     *  Sets riskOverride to none.
+     * Sets riskOverride to none.
      */
     public void removeRiskOverride() {
         riskOverride = Risk.None;

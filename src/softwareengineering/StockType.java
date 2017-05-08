@@ -6,22 +6,19 @@ package softwareengineering;
  * @author Group 26
  */
 public enum StockType {
-    
+
     /**
      * The stock is of type 'Food'
      */
-    Food, 
-    
+    Food,
     /**
      * The stock is of type 'Hard'
      */
-    Hard, 
-    
+    Hard,
     /**
      * The stock is of type 'Property'
      */
-    Property, 
-    
+    Property,
     /**
      * The stock is of type 'Hitech'
      */

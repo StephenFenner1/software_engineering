@@ -35,8 +35,8 @@ public class Client {
 
     /**
      * Overwritten toString method
-     * 
-     * @return the client name. 
+     *
+     * @return the client name.
      */
     @Override
     public String toString() {

@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * UI File
+ * Creates and handles UI 
  * @author Group 26
  */
 public class Setup extends javax.swing.JFrame {
@@ -429,7 +429,7 @@ public class Setup extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Trader ID", "Client Worth Gained", "Average Worth Gained"
+                "Trader ID", "Client Worth Gained (£)", "Average Worth Gained (£)"
             }
         ) {
             Class[] types = new Class [] {
@@ -460,15 +460,15 @@ public class Setup extends javax.swing.JFrame {
             .addGroup(traderPanelLayout.createSequentialGroup()
                 .addGroup(traderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(traderPanelLayout.createSequentialGroup()
-                        .addGap(227, 227, 227)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(traderPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel3))
                     .addGroup(traderPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel4)))
-                .addContainerGap(238, Short.MAX_VALUE))
+                        .addComponent(jLabel4))
+                    .addGroup(traderPanelLayout.createSequentialGroup()
+                        .addGap(149, 149, 149)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         traderPanelLayout.setVerticalGroup(
             traderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -477,9 +477,9 @@ public class Setup extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         mainPane.add(traderPanel, "card2");
@@ -981,7 +981,7 @@ public class Setup extends javax.swing.JFrame {
 
     /**
      * Set trading exchange to be used to display GUI info
-     * @param tradEx 
+     * @param tradEx The trading exchange used to display trading exchange information
      */
     public void setTradingExchange(TradingExchange tradEx) {
         this.tradEx = tradEx;
@@ -992,7 +992,7 @@ public class Setup extends javax.swing.JFrame {
 
     /**
      * Sets the companies to be used to display GUI information
-     * @param companies 
+     * @param companies Company used to display company information
      */
     public void setCompanies(ArrayList<Company> companies) {
         this.companies = companies;

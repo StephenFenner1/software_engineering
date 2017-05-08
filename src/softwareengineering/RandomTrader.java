@@ -158,15 +158,6 @@ public class RandomTrader extends Trader {
     }
 
     /**
-     * Getter method for the mood of the trader.
-     *
-     * @return The mood of the trader.
-     */
-    public Mood GetMood() {
-        return mood;
-    }
-
-    /**
      * public method to change the mood of the trader.
      */
     public void changeMood() {
@@ -226,20 +217,35 @@ public class RandomTrader extends Trader {
         return mood.toString();
     }
 
+    /**
+     * Returns the total amount of money made by a trader for all its clients
+     *
+     * @return the amount of money made by this trader for all clients
+     */
     @Override
     public BigInteger getMoneyMade() {
         return moneyMade;
     }
 
+    /**
+     * Returns the average money made per client by this trader
+     *
+     * @return the average money made
+     */
     @Override
     public BigInteger getAvgMoneyMade() {
         return avgMoneyMade;
     }
 
+    /**
+     * Updates the total money made for all portfolios by this trader
+     *
+     * @param portfolios the list of portfolios
+     */
     @Override
     public void updateMoneyMade(ArrayList<Portfolio> portfolios) {
         int clientCount = 0;
-
+        moneyMade = new BigInteger("0");
         for (Portfolio port : portfolios) {
             if (port.getTrader().getID() == id) {
                 moneyMade = moneyMade.add(BigInteger.valueOf(((port.getClient().getCurrentValue()) - (port.getClient().getInitialValue())) / 100));

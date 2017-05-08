@@ -29,11 +29,12 @@ public class Portfolio {
      * @param client         The client who owns the portfolio.
      * @param companies        Array that contains the company respective to the client from the initialisation data.
      * @param stocks         Array that contains the stock prices respective to the client from the initialisation data.
+     * @param trader         The trader linked to this portfolio
      */
     public Portfolio(Client client, ArrayList<Company> companies, ArrayList<Integer>stocks, Trader trader) {
         this.client = client;     
         this.trader = trader;
-        stockOwned = new HashMap<Company, Integer>();
+        stockOwned = new HashMap<>();
         //both arrays have to be the same size
         if(companies.size() == stocks.size()) {
             //concat lists into map with key = companyName, value = stockValue;
